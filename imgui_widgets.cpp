@@ -33,6 +33,8 @@ Index of this file:
 #endif
 
 #include "imgui.h"
+#include "spectrum.h"
+
 #ifndef IMGUI_DISABLE
 
 #ifndef IMGUI_DEFINE_MATH_OPERATORS
@@ -662,7 +664,7 @@ bool ImGui::ButtonEx(const char* label, const ImVec2& size_arg, ImGuiButtonFlags
     const ImU32 col = GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
     RenderNavHighlight(bb, id);
     RenderFrame(bb.Min, bb.Max, col, true, style.FrameRounding);
-    RenderTextClipped(bb.Min + style.FramePadding, bb.Max - style.FramePadding, label, NULL, &label_size, style.ButtonTextAlign, &bb);
+    RenderTextClipped(bb.Min + style.FramePadding, bb.Max - style.FramePadding, label, NULL, &label_size, style.ButtonTextAlign, &bb, hovered ? Spectrum::GRAY900 : Spectrum::GRAY800);
 
     // Automatically close popups
     //if (pressed && !(flags & ImGuiButtonFlags_DontClosePopups) && (window->Flags & ImGuiWindowFlags_Popup))
@@ -1037,24 +1039,39 @@ bool ImGui::Checkbox(const char* label, bool* v)
 
     const ImRect check_bb(pos, pos + ImVec2(square_sz, square_sz));
     RenderNavHighlight(total_bb, id);
-    RenderFrame(check_bb.Min, check_bb.Max, GetColorU32((held && hovered) ? ImGuiCol_FrameBgActive : hovered ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg), true, style.FrameRounding);
-    ImU32 check_col = GetColorU32(ImGuiCol_CheckMark);
-    if (window->DC.ItemFlags & ImGuiItemFlags_MixedValue)
+    const ImVec2 offset(style.FramePadding.y, style.FramePadding.y);
+    const ImRect check2_bb(check_bb.Min + offset, check_bb.Max - offset);
+    const float check_sz = ImMin(check2_bb.GetWidth(), check2_bb.GetHeight());
+    const float pad = ImMax(1.0f, (float)(int)(check_sz / 3.0f));
+
+    if (window->DC.ItemFlags & ImGuiItemFlags_MixedValue) 
     {
         // Undocumented tristate/mixed/indeterminate checkbox (#2644)
-        ImVec2 pad(ImMax(1.0f, IM_FLOOR(square_sz / 3.6f)), ImMax(1.0f, IM_FLOOR(square_sz / 3.6f)));
-        window->DrawList->AddRectFilled(check_bb.Min + pad, check_bb.Max - pad, check_col, style.FrameRounding);
-    }
+        // (same frame as the checked state)
+        RenderFrame(check2_bb.Min, check2_bb.Max, (held && hovered) ? Spectrum::BLUE700 : hovered ? Spectrum::BLUE600 : Spectrum::BLUE500, false, Spectrum::CHECKBOX_ROUNDING);
+        const ImVec2 line_size = ImVec2(check2_bb.GetWidth() / 2 - style.ItemInnerSpacing.x, 1.5f);
+        RenderFrame(check2_bb.GetCenter() - line_size, check2_bb.GetCenter() + line_size, Spectrum::GRAY50, false, 2.0f);
+    } 
     else if (*v)
     {
-        const float pad = ImMax(1.0f, IM_FLOOR(square_sz / 6.0f));
-        RenderCheckMark(check_bb.Min + ImVec2(pad, pad), check_col, square_sz - pad*2.0f);
+        RenderFrame(check2_bb.Min, check2_bb.Max, (held && hovered) ? Spectrum::BLUE700 : hovered ? Spectrum::BLUE600 : Spectrum::BLUE500, false, Spectrum::CHECKBOX_ROUNDING); 
+        RenderCheckMark(check_bb.Min + ImVec2(pad,pad), Spectrum::GRAY50, square_sz - pad*2.0f);
+    } else {
+        RenderFrameBorder(check2_bb.Min, check2_bb.Max, (held && hovered) ? Spectrum::GRAY800 : hovered ? Spectrum::GRAY700 : Spectrum::GRAY600, Spectrum::CHECKBOX_BORDER_SIZE, Spectrum::CHECKBOX_ROUNDING);
     }
+    //    ImVec2 pad(ImMax(1.0f, IM_FLOOR(square_sz / 3.6f)), ImMax(1.0f, IM_FLOOR(square_sz / 3.6f)));
+    //    window->DrawList->AddRectFilled(check_bb.Min + pad, check_bb.Max - pad, check_col, style.FrameRounding);
+    //}
+    //else if (*v)
+    //{
+    //    const float pad = ImMax(1.0f, IM_FLOOR(square_sz / 6.0f));
+    //    RenderCheckMark(check_bb.Min + ImVec2(pad, pad), check_col, square_sz - pad*2.0f);
 
     if (g.LogEnabled)
         LogRenderedText(&total_bb.Min, *v ? "[x]" : "[ ]");
     if (label_size.x > 0.0f)
-        RenderText(ImVec2(check_bb.Max.x + style.ItemInnerSpacing.x, check_bb.Min.y + style.FramePadding.y), label);
+        //RenderText(text_bb.Min, label, nullptr, true, hovered ? Spectrum::GRAY900 : Spectrum::GRAY800);
+        RenderText(ImVec2(check_bb.Max.x + style.ItemInnerSpacing.x, check_bb.Min.y + style.FramePadding.y), label, nullptr, true, hovered ? Spectrum::GRAY900 : Spectrum::GRAY800);
 
     IMGUI_TEST_ENGINE_ITEM_INFO(id, label, window->DC.ItemFlags | ImGuiItemStatusFlags_Checkable | (*v ? ImGuiItemStatusFlags_Checked : 0));
     return pressed;
@@ -1105,23 +1122,22 @@ bool ImGui::RadioButton(const char* label, bool active)
         MarkItemEdited(id);
 
     RenderNavHighlight(total_bb, id);
-    window->DrawList->AddCircleFilled(center, radius, GetColorU32((held && hovered) ? ImGuiCol_FrameBgActive : hovered ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg), 16);
     if (active)
     {
-        const float pad = ImMax(1.0f, IM_FLOOR(square_sz / 6.0f));
-        window->DrawList->AddCircleFilled(center, radius - pad, GetColorU32(ImGuiCol_CheckMark), 16);
+        window->DrawList->AddCircleFilled(center, radius * 0.8f, ((held && hovered) ? Spectrum::BLUE700 : hovered ? Spectrum::BLUE600 : Spectrum::BLUE500), 16);
+        window->DrawList->AddCircleFilled(center, radius * 0.25f, Spectrum::GRAY75, 16);
     }
-
-    if (style.FrameBorderSize > 0.0f)
+    else 
     {
-        window->DrawList->AddCircle(center + ImVec2(1,1), radius, GetColorU32(ImGuiCol_BorderShadow), 16, style.FrameBorderSize);
-        window->DrawList->AddCircle(center, radius, GetColorU32(ImGuiCol_Border), 16, style.FrameBorderSize);
+        window->DrawList->AddCircleFilled(center, radius * 0.8f, ((held && hovered) ? Spectrum::GRAY800 : hovered ? Spectrum::GRAY700: Spectrum::GRAY600), 16);
+        window->DrawList->AddCircleFilled(center, radius * 0.6f, Spectrum::GRAY75, 16);
     }
 
     if (g.LogEnabled)
         LogRenderedText(&total_bb.Min, active ? "(x)" : "( )");
     if (label_size.x > 0.0f)
-        RenderText(ImVec2(check_bb.Max.x + style.ItemInnerSpacing.x, check_bb.Min.y + style.FramePadding.y), label);
+        // RenderText(text_bb.Min, label, nullptr, true, hovered ? Spectrum::GRAY900 : Spectrum::GRAY800);
+        RenderText(ImVec2(check_bb.Max.x + style.ItemInnerSpacing.x, check_bb.Min.y + style.FramePadding.y), label, nullptr, true, hovered ? Spectrum::GRAY900 : Spectrum::GRAY800);
 
     return pressed;
 }
@@ -1541,7 +1557,9 @@ bool ImGui::BeginCombo(const char* label, const char* preview_value, ImGuiComboF
 
     // Horizontally align ourselves with the framed text
     PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(style.FramePadding.x, style.WindowPadding.y));
+    PushStyleVar(ImGuiStyleVar_PopupRounding, 4.0f);
     bool ret = Begin(name, NULL, window_flags);
+    PopStyleVar();
     PopStyleVar();
     if (!ret)
     {
@@ -5457,7 +5475,7 @@ bool ImGui::TreeNodeBehavior(ImGuiID id, ImGuiTreeNodeFlags flags, const char* l
         }
         else
         {
-            RenderTextClipped(text_pos, frame_bb.Max, label, label_end, &label_size);
+            RenderTextClipped(text_pos, frame_bb.Max, label, label_end, &label_size, ImVec2(0, 0), nullptr, Spectrum::GRAY50);
         }
     }
     else
@@ -5693,11 +5711,17 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
     // Render
     if (held && (flags & ImGuiSelectableFlags_DrawHoveredWhenHeld))
         hovered = true;
-    if (hovered || selected)
-    {
-        const ImU32 col = GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
-        RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
+    if (hovered) {
+        RenderFrame(bb.Min, bb.Max, Spectrum::color_alpha(0x0A, Spectrum::Static::GRAY900), false, 0.0f);
         RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
+    }
+    if (selected) {
+        // add a checkmark and text is blue
+        float height = bb.GetHeight();
+        if (!window->DC.MenuBarAppending) { // we use this to check if we are drawing menubar items. Menubar uses selectables, but we don't want a checkmark on those. 
+            RenderCheckMark(ImVec2(bb.Max.x - height, bb.GetCenter().y - height / 2), Spectrum::BLUE600, height / 3.0f * 2.0f);
+        }
+        PushStyleColor(ImGuiCol_Text, Spectrum::BLUE600);
     }
 
     if ((flags & ImGuiSelectableFlags_SpanAllColumns) && window->DC.CurrentColumns)
@@ -5709,6 +5733,7 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
     if (flags & ImGuiSelectableFlags_Disabled) PushStyleColor(ImGuiCol_Text, style.Colors[ImGuiCol_TextDisabled]);
     RenderTextClipped(bb_inner.Min, bb_inner.Max, label, NULL, &label_size, style.SelectableTextAlign, &bb);
     if (flags & ImGuiSelectableFlags_Disabled) PopStyleColor();
+    if (selected) PopStyleColor();
 
     // Automatically close popups
     if (pressed && (window->Flags & ImGuiWindowFlags_Popup) && !(flags & ImGuiSelectableFlags_DontClosePopups) && !(window->DC.ItemFlags & ImGuiItemFlags_SelectableDontClosePopup))

@@ -1,3 +1,5 @@
+for information on ImGui-Spectrum check [Spectrum.md](Spectrum.md). Original ImGui readme follows.
+
 dear imgui
 =====
 [![Build Status](https://github.com/ocornut/imgui/workflows/build/badge.svg)](https://github.com/ocornut/imgui/actions?workflow=build)

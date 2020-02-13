@@ -149,6 +149,7 @@
     <ClCompile Include="..\..\imgui_demo.cpp" />
     <ClCompile Include="..\..\imgui_draw.cpp" />
     <ClCompile Include="..\..\imgui_widgets.cpp" />
+    <ClCompile Include="..\..\spectrum.cpp" />
     <ClCompile Include="..\imgui_impl_dx9.cpp" />
     <ClCompile Include="..\imgui_impl_win32.cpp" />
     <ClCompile Include="main.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="..\..\imconfig.h" />
     <ClInclude Include="..\..\imgui.h" />
     <ClInclude Include="..\..\imgui_internal.h" />
+    <ClInclude Include="..\..\spectrum.h" />
     <ClInclude Include="..\imgui_impl_dx9.h" />
     <ClInclude Include="..\imgui_impl_win32.h" />
   </ItemGroup>

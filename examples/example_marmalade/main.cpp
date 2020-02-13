@@ -24,7 +24,8 @@ int main(int, char**)
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;        // Enable Docking
 
     // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
+    ImGui::Spectrum::StyleColorsSpectrum();
+    // ImGui::StyleColorsDark();
     //ImGui::StyleColorsClassic();
 
     // Setup Platform/Renderer bindings
