@@ -13,6 +13,8 @@
 
 #pragma once
 
+#define IMGUI_API UE4IMGUI_API
+
 //---- Define assertion handler. Defaults to calling assert().
 //#define IM_ASSERT(_EXPR)  MyAssert(_EXPR)
 //#define IM_ASSERT(_EXPR)  ((void)(_EXPR))     // Disable asserts
