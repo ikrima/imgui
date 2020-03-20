@@ -21,6 +21,7 @@
 //  The default imgui styles will be impacted by this change (alpha values will need tweaking).
 
 // FIXME: cfg.OversampleH, OversampleV are not supported (but perhaps not so necessary with this rasterizer).
+#if WITH_IMGUI_FREETYPE
 
 #include "imgui_freetype.h"
 #include "imgui_internal.h"     // ImMin,ImMax,ImFontAtlasBuild*,
@@ -673,3 +674,5 @@ void ImGuiFreeType::SetAllocatorFunctions(void* (*alloc_func)(size_t sz, void* u
     GImFreeTypeFreeFunc = free_func;
     GImFreeTypeAllocatorUserData = user_data;
 }
+
+#endif
