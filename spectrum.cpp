@@ -7,11 +7,14 @@ namespace ImGui {
         extern const unsigned int SourceSansProRegular_compressed_size = 149392;
         extern const unsigned int SourceSansProRegular_compressed_data[]; // defined later in the file
 
-        void StyleColorsSpectrum() {
+        void LoadFont(float size) {
             ImGuiIO& io = ImGui::GetIO();
-            ImFont* font = io.Fonts->AddFontFromMemoryCompressedTTF(SourceSansProRegular_compressed_data, SourceSansProRegular_compressed_size, 16.0f);
-            if (font) io.FontDefault = font;
+            ImFont* font = io.Fonts->AddFontFromMemoryCompressedTTF(SourceSansProRegular_compressed_data, SourceSansProRegular_compressed_size, size);
+            assert(font != nullptr);
+            io.FontDefault = font;
+        }
 
+        void StyleColorsSpectrum() {
             ImGuiStyle* style = &ImGui::GetStyle();
             style->GrabRounding = 4.0f;
 

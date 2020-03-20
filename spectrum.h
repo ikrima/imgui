@@ -26,10 +26,15 @@ namespace ImGui {
         const float CHECKBOX_BORDER_SIZE = 2.0f;
         const float CHECKBOX_ROUNDING = 2.0f;
 
+        // Load SourceSansProRegular and sets it as a default font.
+        // You may want to call ImGui::GetIO().Fonts->Clear() before this
+        void LoadFont(float size = 16.0f);
+
+        // Sets the ImGui style to Spectrum
         void StyleColorsSpectrum();
 
         namespace { // Unnamed namespace, since we only use this here. 
-            const unsigned int Color(unsigned int c) {
+            unsigned int Color(unsigned int c) {
                 // add alpha.
                 // also swap red and blue channel for some reason.
                 // todo: figure out why, and fix it.

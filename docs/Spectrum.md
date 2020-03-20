@@ -67,7 +67,30 @@ In general, the plan is to *not* add the full range of Spectrum controls and the
 The above functions are likely to cause merge issue in the future if ImGui's author decides to refactor them as planned.
 
 ### How to update ater ImGui releases:
-1. If you don't yet have the original remote in your local copy, you can add it with `git remote add ocornut-origin https://github.com/ocornut/imgui.git`
-2. pull changes with `git pull ocornut-origin master` 
+0. If you don't yet have the original remote in your local copy (check with `git remote -v`), add it: 
+```
+git remote add ocornut https://github.com/ocornut/imgui.git`
+```
+
+1. pull changes 
+```
+git pull master
+git fetch --tags ocornut
+```
+
+2. Merge master branch release
+```
+git merge v1.xx
+```
+
 3. Merge eventual conflicts
-4. Commit and push your changes as usual (and/or make a pull request!). 
+
+4. Checkout and merge other branches. 
+Using the `docking` branch in the example here. We need to checkout the local `docking` branch, then pull changes from imgui. Those will contain the release, but not the ImGui-Spectrum merge, so then we merge master into the branch again. 
+```
+git checkout docking
+git merge ocornut docking
+git merge master
+```
+
+5. Commit and push your changes as usual (and/or make a pull request!). 
