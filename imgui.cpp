@@ -15366,6 +15366,12 @@ static void ImGui::DockSettingsHandler_WriteAll(ImGuiContext* ctx, ImGuiSettings
 //-----------------------------------------------------------------------------
 // [SECTION] PLATFORM DEPENDENT HELPERS
 //-----------------------------------------------------------------------------
+// @third party code - BEGIN Bebylon - #ThirdParty-ImGui: Add UE4 thirdparty include guards
+#if PLATFORM_WINDOWS
+#include "Windows/WindowsHWrapper.h"
+#include "Windows/AllowWindowsPlatformTypes.h"
+#endif // PLATFORM_WINDOWS
+// @third party code - END Bebylon
 
 #if defined(_WIN32) && !defined(_WINDOWS_) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS) && (!defined(IMGUI_DISABLE_WIN32_DEFAULT_CLIPBOARD_FUNCTIONS) || !defined(IMGUI_DISABLE_WIN32_DEFAULT_IME_FUNCTIONS))
 #ifndef WIN32_LEAN_AND_MEAN
@@ -15507,6 +15513,12 @@ static void SetClipboardTextFn_DefaultImpl(void*, const char* text)
 
 #endif
 
+
+// @third party code - BEGIN Bebylon - #ThirdParty-ImGui: Add UE4 thirdparty include guards
+#if PLATFORM_WINDOWS
+#include "Windows/HideWindowsPlatformTypes.h"
+#endif
+// @third party code - END Bebylon
 //-----------------------------------------------------------------------------
 // [SECTION] METRICS/DEBUG WINDOW
 //-----------------------------------------------------------------------------
