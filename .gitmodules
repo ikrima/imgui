@@ -1,0 +1,20 @@
+[submodule "ImGuiUX/Dmd_NodeEditor"]
+	path = ImGuiUX/Dmd_NodeEditor
+	url = https://github.com/ikrima/imgui-node-editor.git
+	branch = ue4-mods
+[submodule "ImGuiUX/IconFontCppHeaders"]
+	path = ImGuiUX/IconFontCppHeaders
+	url = https://github.com/ikrima/IconFontCppHeaders.git
+	branch = master
+[submodule "ImGuiUX/ImGuiAl"]
+	path = ImGuiUX/ImGuiAl
+	url = https://github.com/ikrima/ImGuiAl.git
+	branch = ue4-mods
+[submodule "ImGuiUX/ImGuiColorTextEdit"]
+	path = ImGuiUX/ImGuiColorTextEdit
+	url = https://github.com/ikrima/ImGuiColorTextEdit.git
+	branch = master
+[submodule "ImGuiUX/ImGuizmo"]
+	path = ImGuiUX/ImGuizmo
+	url = https://github.com/ikrima/ImGuizmo.git
+	branch = ue4-mods
