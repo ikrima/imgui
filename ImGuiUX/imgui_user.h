@@ -100,6 +100,30 @@ namespace ImGuiUX {
             }
         }
     };
+    namespace ned = ax::NodeEditor;
+    struct [[nodiscard]] ImScopeNed final : _Scope
+    {
+        ImScopeNed(const char* id) { ned::Begin(id); }
+        ~ImScopeNed() { ned::End(); }
+    };
+
+    struct [[nodiscard]] ImScopeNedNode final : _Scope
+    {
+        ImScopeNedNode(ned::NodeId id) { ned::BeginNode(id); }
+        ~ImScopeNedNode()              { ned::EndNode();     }
+    };
+
+    struct [[nodiscard]] ImScopeNedCreate final : _Scope
+    {
+        ImScopeNedCreate(const ImVec4& color = ImVec4(1, 1, 1, 1), float thickness = 1.0f)  { ned::BeginCreate(color,thickness); }
+        ~ImScopeNedCreate() { ned::EndCreate(); }
+    };
+
+    struct [[nodiscard]] ImScopeNedDelete final : _Scope
+    {
+        ImScopeNedDelete()  { ned::BeginDelete(); }
+        ~ImScopeNedDelete() { ned::EndDelete(); }
+    };
 }
 
 #pragma endregion
