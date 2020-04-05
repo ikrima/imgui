@@ -50,6 +50,12 @@ namespace ImGuiUX {
         bool _bOpened = true;
     };
 
+//------------------------------------------------------------------------------------------------------------------------
+#pragma region ImGui Scope Helpers
+
+
+#pragma endregion
+//------------------------------------------------------------------------------------------------------------------------
     struct [[nodiscard]] ImScopeIndent final : _Scope
     {
         ImScopeIndent() { ImGui::Indent(); }
@@ -100,6 +106,10 @@ namespace ImGuiUX {
             }
         }
     };
+
+//------------------------------------------------------------------------------------------------------------------------
+#pragma region Node Editor Scope Helpers
+
     namespace ned = ax::NodeEditor;
     struct [[nodiscard]] ImScopeNed final : _Scope
     {
@@ -115,16 +125,20 @@ namespace ImGuiUX {
 
     struct [[nodiscard]] ImScopeNedCreate final : _Scope
     {
-        ImScopeNedCreate(const ImVec4& color = ImVec4(1, 1, 1, 1), float thickness = 1.0f)  { ned::BeginCreate(color,thickness); }
+        ImScopeNedCreate(const ImVec4& color = ImVec4(1, 1, 1, 1), float thickness = 1.0f)  { _bOpened = ned::BeginCreate(color,thickness); }
         ~ImScopeNedCreate() { ned::EndCreate(); }
     };
 
     struct [[nodiscard]] ImScopeNedDelete final : _Scope
     {
-        ImScopeNedDelete()  { ned::BeginDelete(); }
+        ImScopeNedDelete()  { _bOpened = ned::BeginDelete(); }
         ~ImScopeNedDelete() { ned::EndDelete(); }
     };
+#pragma endregion
+//------------------------------------------------------------------------------------------------------------------------
+
 }
+
 
 #pragma endregion
 //------------------------------------------------------------------------------------------------------------------------
