@@ -93,18 +93,14 @@ namespace ImGuiUX {
 
     struct [[nodiscard]] ImScopeMenu final : _Scope
     {
-        ImScopeMenu(const char* name)
-        {
-            _bOpened = ImGui::BeginMenu(name);
-        }
+        ImScopeMenu(const char* name) { _bOpened = ImGui::BeginMenu(name); }
+        ~ImScopeMenu()                { if (_bOpened) { ImGui::EndMenu(); } }
+    };
 
-        ~ImScopeMenu()
-        {
-            if (_bOpened)
-            {
-                ImGui::EndMenu();
-            }
-        }
+    struct [[nodiscard]] ImScopePopup final : _Scope
+    {
+        ImScopePopup(const char* str_id, ImGuiWindowFlags flags=0) { _bOpened = ImGui::BeginPopup(str_id,flags); }
+        ~ImScopePopup()                                            { if (_bOpened) { ImGui::EndPopup(); } }
     };
 
 //------------------------------------------------------------------------------------------------------------------------
