@@ -6,6 +6,7 @@
 #define IMGUIUIX_FEATURE_ADOBESPECTRUM 1
 #define IMGUIUIX_FEATURE_NODEDITOR     1
 
+#define IMGUIUX_SHAREDLIB 0
 #pragma endregion
 //========================================================================================================================
 
@@ -25,7 +26,7 @@
 
 //========================================================================================================================
 #pragma region Support for global across dll boundaries ImGui context
-#ifdef IMGUIUX_SHAREDLIB
+#if IMGUIUX_SHAREDLIB
 // If compiling imgui as a shared dll, we need to wrap the global context with a function
 #define GImGui (ImGuiUX::GetGlobalImGuiCtx())
 #define IMGUI_SET_CURRENT_CONTEXT_FUNC(InCtx) ImGuiUX::SetGlobalImGuiCtx(InCtx)

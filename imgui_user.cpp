@@ -3,7 +3,7 @@
 #include "imgui_user.h"
 #include "imgui.h"
 
-#ifdef IMGUIUX_SHAREDLIB
+#if IMGUIUX_SHAREDLIB
 
 namespace
 {
