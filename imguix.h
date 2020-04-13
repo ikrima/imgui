@@ -1,16 +1,6 @@
-// Copyright Kite & Lightning
+#pragma once
 
 #include "imgui.h"
-
-//========================================================================================================================
-#pragma region Support for global across dll boundaries ImGui context
-#if IMGUIUX_SHAREDLIB
-namespace { ImGuiContext* globalImGuiCtx = nullptr; }
-ImGuiContext* ImGuiUX::GetGlobalImGuiCtx() { return globalImGuiCtx; }
-void ImGuiUX::SetGlobalImGuiCtx(ImGuiContext* InCtx) { globalImGuiCtx = InCtx; }
-#endif
-#pragma endregion
-//========================================================================================================================
 
 //========================================================================================================================
 #pragma region Scoped Helper Utils
