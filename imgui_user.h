@@ -49,8 +49,6 @@ namespace ImGuiUX {
 #define IM_CONCAT(x, y) IM_CONCAT_IMPL(x, y)
 #define IM_CONCAT_IMPL(x, y) x##y
 #define IMWITH(x) if(auto IM_CONCAT(hold,__LINE__) = ImGuiUX::##x; IM_CONCAT(hold,__LINE__).IsOpen())
-#undef IM_CONCAT
-#undef IM_CONCAT_IMPL
 
 
 namespace ImGuiUX {
