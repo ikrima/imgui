@@ -4,7 +4,7 @@
 #pragma region Config
 
 #define IMGUIUIX_FEATURE_ADOBESPECTRUM 1
-#define IMGUIUIX_FEATURE_NODEDITOR     0
+#define IMGUIUIX_FEATURE_NODEDITOR     1
 
 #pragma endregion
 //========================================================================================================================
@@ -17,7 +17,7 @@
 #endif
 
 #if IMGUIUIX_FEATURE_NODEDITOR
-#include "ImGuiUX/Dmd_NodeEditor/NodeEditor/include/imgui_node_editor.h"
+#include "ImGuiUX/DmdNodeEditor/NodeEditor/include/imgui_node_editor.h"
 #endif
 
 #pragma endregion
