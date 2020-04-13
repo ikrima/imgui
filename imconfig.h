@@ -18,8 +18,8 @@
 
 #define IMGUIUIX_FEATURE_ADOBESPECTRUM 1
 #define IMGUIUIX_FEATURE_NODEDITOR     1
-#define IMGUIUX_SHAREDLIB              0
-#define IMGUIUX_FEATURE_UE4            0
+#define IMGUIUX_SHAREDLIB              1
+#define IMGUIUX_FEATURE_UE4            1
 
 //------------------------------------------------------------------------------------------------------------------------
 #pragma region UE4 Support

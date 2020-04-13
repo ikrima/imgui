@@ -19,6 +19,7 @@
 //  See https://www.freetype.org/freetype2/docs/reference/ft2-base_interface.html#FT_Render_Glyph
 //  For correct results you need to be using sRGB and convert to linear space in the pixel shader output.
 //  The default imgui styles will be impacted by this change (alpha values will need tweaking).
+#if WITH_IMGUI_FREETYPE
 
 // FIXME: cfg.OversampleH, OversampleV are not supported (but perhaps not so necessary with this rasterizer).
 
@@ -679,3 +680,4 @@ void ImGuiFreeType::SetAllocatorFunctions(void* (*alloc_func)(size_t sz, void* u
     GImFreeTypeFreeFunc = free_func;
     GImFreeTypeAllocatorUserData = user_data;
 }
+#endif
