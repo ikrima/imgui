@@ -1,0 +1,4 @@
+[submodule "ImGuiUX/DmdNodeEditor"]
+	path = ImGuiUX/DmdNodeEditor
+	url = https://github.com/ikrima/imgui-node-editor.git
+	branch = master
