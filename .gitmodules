@@ -1,0 +1,3 @@
+[submodule "ImGuiUX/ImGuizmo"]
+	path = ImGuiUX/ImGuizmo
+	url = https://github.com/ikrima/ImGuizmo.git
