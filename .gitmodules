@@ -2,3 +2,7 @@
 	path = ImGuiUX/DmdNodeEditor
 	url = https://github.com/ikrima/imgui-node-editor.git
 	branch = master
+[submodule "ImGuiUX/ImGuizmo"]
+	path = ImGuiUX/ImGuizmo
+	url = https://github.com/ikrima/ImGuizmo.git
+	branch = master
