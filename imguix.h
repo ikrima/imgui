@@ -3,6 +3,17 @@
 #include "imgui.h"
 
 //========================================================================================================================
+#pragma region ImGui Functionality Extensions
+
+
+namespace ImGuiUX {
+    IMGUI_API ImGuiViewport* FindViewportByPlatformHandleRaw(void* platform_handle_raw);     // this is a helper for back-ends. the type platform_handle is decided by the back-end (e.g. HWND, MyWindow*, GLFWwindow* etc.)
+}
+
+#pragma endregion
+//========================================================================================================================
+
+//========================================================================================================================
 #pragma region Scoped Helper Utils
 
 #define IM_CONCAT(x, y) IM_CONCAT_IMPL(x, y)
@@ -114,6 +125,15 @@ namespace ImGuiUX {
 #pragma endregion
     //------------------------------------------------------------------------------------------------------------------------
 
+    inline void Tooltip(const char* Txt)
+    {
+        if (ImGui::IsItemHovered())
+        {
+            ImGui::BeginTooltip();
+            ImGui::TextUnformatted(Txt);
+            ImGui::EndTooltip();
+        }
+    }
 
 }
 
