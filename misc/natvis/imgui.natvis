@@ -34,10 +34,49 @@
 
 <Type Name="ImGuiWindow">
   <DisplayString>{{Name {Name,s} Active {(Active||WasActive)?1:0,d} Child {(Flags &amp; 0x01000000)?1:0,d} Popup {(Flags &amp; 0x04000000)?1:0,d} Hidden {(Hidden)?1:0,d}}</DisplayString>
+  <Expand>
+    <Item Name="Position">Pos</Item>
+    <Item Name="Size">Size</Item>
+    <Synthetic Name="Cursor">
+      <DisplayString>{{ x={DC.CursorPos.x - DC.CursorStartPos.x,g} y={DC.CursorPos.y - DC.CursorStartPos.y,g} }}</DisplayString>
+      <Expand>
+        <Item Name="x">DC.CursorPos.x - DC.CursorStartPos.x</Item>
+        <Item Name="y">DC.CursorPos.y - DC.CursorStartPos.y</Item>
+      </Expand>
+    </Synthetic>
+    <Synthetic Name="Cursor (Previous Line)">
+      <DisplayString>{{ x={DC.CursorPosPrevLine.x - DC.CursorStartPos.x,g} y={DC.CursorPosPrevLine.y - DC.CursorStartPos.y,g} }}</DisplayString>
+      <Expand>
+        <Item Name="x">DC.CursorPosPrevLine.x - DC.CursorStartPos.x</Item>
+        <Item Name="y">DC.CursorPosPrevLine.y - DC.CursorStartPos.y</Item>
+      </Expand>
+    </Synthetic>
+    <Item Name="Size">Size,view(size)</Item>
+    <Item Name="Size (Full)">SizeFull,view(size)</Item>
+    <Synthetic Name="Line Size">
+      <DisplayString>{{w={DC.CursorMaxPos.x - DC.CursorPos.x,g} h={DC.CursorMaxPos.y - DC.CursorPos.y,g} }}</DisplayString>
+      <Expand>
+        <Item Name="w">DC.CursorMaxPos.x - DC.CursorPos.x</Item>
+        <Item Name="h">DC.CursorMaxPos.y - DC.CursorPos.y</Item>
+      </Expand>
+    </Synthetic>
+    <Item Name="Last Item Rect">DC.LastItemRect</Item>
+    <Item Name="Child Windows">DC.ChildWindows</Item>
+  </Expand>
+</Type>
+
+<Type Name="ImGuiLayout">
+  <DisplayString Condition="Type == 0">{{ ID: {Id,H} Type=Vertical }}</DisplayString>
+  <DisplayString Condition="Type == 1">{{ ID: {Id,H} Type=Horizontal }}</DisplayString>
+</Type>
+
+<Type Name="ImGuiLayoutItem">
+  <DisplayString Condition="Type == 0">{{ Item Size={Size,view(size)} }}</DisplayString>
+  <DisplayString Condition="Type == 1">{{ Spring Weight={SpringWeight,g} Spacing={SpringSpacing,g} Size={SpringSize,g} }}</DisplayString>
 </Type>
 
 <Type Name="ImGuiDockNode">
   <DisplayString>{{ID {ID,x} Pos=({Pos.x,g} {Pos.y,g}) Size=({Size.x,g} {Size.y,g}) Parent {(ParentNode==0)?0:ParentNode->ID,x} Childs {(ChildNodes[0] != 0)+(ChildNodes[1] != 0)} Windows {Windows.Size}  }</DisplayString>
 </Type>
-  
+
 </AutoVisualizer>
