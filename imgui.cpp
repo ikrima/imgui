@@ -10579,6 +10579,7 @@ void ImGui::ResumeLayout()
     ImGuiWindow* window = GetCurrentWindow();
     IM_ASSERT(!window->DC.CurrentLayout);
     IM_ASSERT(!window->DC.LayoutStack.empty());
+    IM_UNUSED(window);
     PopLayout(NULL);
 }
 
