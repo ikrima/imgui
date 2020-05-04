@@ -16,10 +16,18 @@
 //========================================================================================================================
 #pragma region ImGuiUX Config
 
-#define IMGUIUIX_FEATURE_ADOBESPECTRUM 1
-#define IMGUIUIX_FEATURE_NODEDITOR     1
-#define IMGUIUX_SHAREDLIB              0
-#define IMGUIUX_FEATURE_UE4            0
+#ifndef IMGUIUIX_FEATURE_ADOBESPECTRUM
+  #define IMGUIUIX_FEATURE_ADOBESPECTRUM 1
+#endif
+#ifndef IMGUIUIX_FEATURE_NODEDITOR
+  #define IMGUIUIX_FEATURE_NODEDITOR     1
+#endif
+#ifndef IMGUIUX_SHAREDLIB
+  #define IMGUIUX_SHAREDLIB              0
+#endif
+#ifndef IMGUIUX_FEATURE_UE4
+  #define IMGUIUX_FEATURE_UE4            0
+#endif
 
 //------------------------------------------------------------------------------------------------------------------------
 #pragma region UE4 Support
