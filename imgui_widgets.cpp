@@ -1053,10 +1053,14 @@ bool ImGui::Checkbox(const char* label, bool* v)
 
     const ImRect check_bb(pos, pos + ImVec2(square_sz, square_sz));
     RenderNavHighlight(total_bb, id);
+
+    // ImGui-Spectrum changes start here
     const ImVec2 offset(style.FramePadding.y, style.FramePadding.y);
     const ImRect check2_bb(check_bb.Min + offset, check_bb.Max - offset);
     const float check_sz = ImMin(check2_bb.GetWidth(), check2_bb.GetHeight());
     const float pad = ImMax(1.0f, (float)(int)(check_sz / 3.0f));
+    ImU32 check_col = GetColorU32(ImGuiCol_CheckMark);
+    IM_UNUSED(check_col);
 
     if (window->DC.ItemFlags & ImGuiItemFlags_MixedValue) 
     {
@@ -1068,18 +1072,17 @@ bool ImGui::Checkbox(const char* label, bool* v)
     } 
     else if (*v)
     {
-        RenderFrame(check2_bb.Min, check2_bb.Max, (held && hovered) ? Spectrum::BLUE700 : hovered ? Spectrum::BLUE600 : Spectrum::BLUE500, false, Spectrum::CHECKBOX_ROUNDING); 
+        ImU32 frame_col = (held && hovered) ? Spectrum::BLUE700 : (hovered ? Spectrum::BLUE600 : Spectrum::BLUE500);
+        RenderFrame(check2_bb.Min, check2_bb.Max, frame_col, false, Spectrum::CHECKBOX_ROUNDING); 
         RenderCheckMark(window->DrawList, check_bb.Min + ImVec2(pad,pad), Spectrum::GRAY50, square_sz - pad*2.0f);
     } else {
-        RenderFrameBorder(check2_bb.Min, check2_bb.Max, (held && hovered) ? Spectrum::GRAY800 : hovered ? Spectrum::GRAY700 : Spectrum::GRAY600, Spectrum::CHECKBOX_BORDER_SIZE, Spectrum::CHECKBOX_ROUNDING);
+        ImU32 border_col = (held && hovered) ? Spectrum::GRAY800 : (hovered ? Spectrum::GRAY700 : Spectrum::GRAY600);
+        PushStyleVar(ImGuiStyleVar_FrameBorderSize, Spectrum::CHECKBOX_BORDER_SIZE);
+        PushStyleColor(ImGuiCol_Border, border_col);
+        RenderFrameBorder(check2_bb.Min, check2_bb.Max, Spectrum::CHECKBOX_ROUNDING);
+        PopStyleVar();
+        PopStyleColor();
     }
-    //    ImVec2 pad(ImMax(1.0f, IM_FLOOR(square_sz / 3.6f)), ImMax(1.0f, IM_FLOOR(square_sz / 3.6f)));
-    //    window->DrawList->AddRectFilled(check_bb.Min + pad, check_bb.Max - pad, check_col, style.FrameRounding);
-    //}
-    //else if (*v)
-    //{
-    //    const float pad = ImMax(1.0f, IM_FLOOR(square_sz / 6.0f));
-    //    RenderCheckMark(check_bb.Min + ImVec2(pad, pad), check_col, square_sz - pad*2.0f);
 
     if (g.LogEnabled)
         LogRenderedText(&total_bb.Min, *v ? "[x]" : "[ ]");
@@ -1581,6 +1584,7 @@ bool ImGui::BeginCombo(const char* label, const char* preview_value, ImGuiComboF
         IM_ASSERT(0);   // This should never happen as we tested for IsPopupOpen() above
         return false;
     }
+    GetCurrentWindow()->DC.IsComboPopup = true;
     return true;
 }
 
@@ -5710,18 +5714,29 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
     // Render
     if (held && (flags & ImGuiSelectableFlags_DrawHoveredWhenHeld))
         hovered = true;
-    if (hovered) {
-        RenderFrame(bb_enlarged.Min, bb_enlarged.Max, Spectrum::color_alpha(0x0A, Spectrum::Static::GRAY900), false, 0.0f);
+
+    if (window->DC.IsComboPopup) { // ImGui-Spectrum: change Selectable rendering for ComboBox and ListBox
+
+        if (hovered) {
+            RenderFrame(bb_enlarged.Min, bb_enlarged.Max, Spectrum::color_alpha(0x0A, Spectrum::Static::GRAY900), false, 0.0f);
+            RenderNavHighlight(bb_enlarged, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
+        }
+
+        if (selected) { // add a checkmark and text is blue
+            float height = bb_enlarged.GetHeight();
+            RenderCheckMark(window->DrawList, ImVec2(bb_enlarged.Max.x - height, bb_enlarged.GetCenter().y - height / 2),
+                Spectrum::BLUE600, height / 3.0f * 2.0f);
+            PushStyleColor(ImGuiCol_Text, Spectrum::BLUE600);
+        }
+
+    } else if (hovered || selected)
+    {
+        const ImU32 col = GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
+        RenderFrame(bb_enlarged.Min, bb_enlarged.Max, col, false, 0.0f);
         RenderNavHighlight(bb_enlarged, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
     }
-    if (selected) {
-        // add a checkmark and text is blue
-        float height = bb_enlarged.GetHeight();
-        if (!window->DC.MenuBarAppending) { // we use this to check if we are drawing menubar items. Menubar uses selectables, but we don't want a checkmark on those. 
-            RenderCheckMark(window->DrawList, ImVec2(bb_enlarged.Max.x - height, bb_enlarged.GetCenter().y - height / 2), Spectrum::BLUE600, height / 3.0f * 2.0f);
-        }
-        PushStyleColor(ImGuiCol_Text, Spectrum::BLUE600);
-    }
+
+
 
     if ((flags & ImGuiSelectableFlags_SpanAllColumns) && window->DC.CurrentColumns)
         PopColumnsBackground();
@@ -5729,7 +5744,7 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
     if (flags & ImGuiSelectableFlags_Disabled) PushStyleColor(ImGuiCol_Text, style.Colors[ImGuiCol_TextDisabled]);
     RenderTextClipped(text_min, text_max, label, NULL, &label_size, style.SelectableTextAlign, &bb_enlarged);
     if (flags & ImGuiSelectableFlags_Disabled) PopStyleColor();
-    if (selected) PopStyleColor();
+    if (window->DC.IsComboPopup && selected) PopStyleColor(); // ImGui-Spectrum: undo blue color from above
 
     // Automatically close popups
     if (pressed && (window->Flags & ImGuiWindowFlags_Popup) && !(flags & ImGuiSelectableFlags_DontClosePopups) && !(window->DC.ItemFlags & ImGuiItemFlags_SelectableDontClosePopup))
@@ -5794,6 +5809,7 @@ bool ImGui::ListBoxHeader(const char* label, const ImVec2& size_arg)
         RenderText(ImVec2(frame_bb.Max.x + style.ItemInnerSpacing.x, frame_bb.Min.y + style.FramePadding.y), label);
 
     BeginChildFrame(id, frame_bb.GetSize());
+    GetCurrentWindow()->DC.IsComboPopup = true;
     return true;
 }
 

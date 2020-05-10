@@ -21,7 +21,7 @@ Please read ImGui's [README.md](./README.md).
 ### Using Spectrum in your code
 Make sure you call `ImGui::Spectrum::StyleColorsSpectrum();` at the start of your application, after ImGui has been initialized. You can pick between Light and Dark theme, check `spectrum.h`.
 
-Note that calling `ImGui::Spectrum::StyleColorsSpectrum();` also sets the font to [Source Sans Pro](https://github.com/adobe-fonts/source-sans-pro). If you have access to Adobe internal resources, you may want to swap it to AdobeClean-Regular (download [here](http://spectrum.corp.adobe.com/fonts.html)). 
+Optionally, you can call `ImGui::Spectrum::LoadFont(size)` to load [Source Sans Pro](https://github.com/adobe-fonts/source-sans-pro). If you have access to it, you may want to swap it to AdobeClean-Regular (download [here](http://spectrum.corp.adobe.com/fonts.html)). 
 
 You can either use the following code, or embed the font in your build. To embed the font, check [here](https://git.corp.adobe.com/gori/adobe-fonts-for-imgui) and [here](../misc/fonts/README.txt) for more info.
 
@@ -60,9 +60,9 @@ In general, the plan is to *not* add the full range of Spectrum controls and the
 ### Internal Changes
 * Added spectrum.h with spectrum colors under `namespace Spectrum`.
 * Added spectrum.cpp with `StyleColorsSpectrum()` similar to `ImGui::StyleColorsDark()`. 
-* Added RenderFrameBorder that takes border color and size
-* Added RenderFrame that takes border color
 * Added color parameter to RenderText, RenderTextWrapped, RenderTextClipped
+* Added `ImGuiWindowTempData::IsComboPopup`, a `bool` field that is true in a Combo or ListBox popup window. Used in Selectable to change the hover and selected style.
+
 
 The above functions are likely to cause merge issue in the future if ImGui's author decides to refactor them as planned.
 
