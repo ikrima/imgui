@@ -88,6 +88,21 @@ namespace ImGuiUX {
         ImScopePopup(const char* str_id, ImGuiWindowFlags flags = 0) { _bOpened = ImGui::BeginPopup(str_id,flags); }
         ~ImScopePopup() { if (_bOpened) { ImGui::EndPopup(); } }
     };
+
+    struct [[nodiscard]] ImScopeVertical final : _Scope
+    {
+
+        ImScopeVertical(const char* str_id, const ImVec2& size = ImVec2(0, 0), float align = -1.0f) { ImGui::BeginVertical(str_id,size,align); }
+        ImScopeVertical(int   id, const ImVec2& size = ImVec2(0, 0), float align = -1) { ImGui::BeginVertical(id,size,align); }
+        ~ImScopeVertical() { ImGui::EndVertical(); }
+    };
+
+    struct [[nodiscard]] ImScopeHorizontal final : _Scope
+    {
+
+        ImScopeHorizontal(const char* str_id, const ImVec2& size = ImVec2(0, 0), float align = -1.0f) { ImGui::BeginHorizontal(str_id,size,align); }
+        ~ImScopeHorizontal() { ImGui::EndHorizontal(); }
+    };
 #pragma endregion
     //------------------------------------------------------------------------------------------------------------------------
 
@@ -99,14 +114,22 @@ namespace ImGuiUX {
     namespace ned = ax::NodeEditor;
     struct [[nodiscard]] ImScopeNed final : _Scope
     {
-        ImScopeNed(const char* id) { ned::Begin(id); }
-        ~ImScopeNed() { ned::End(); }
+        ImScopeNed(const char* id, ned::EditorContext* a_nedCtx) { ned::SetCurrentEditor(a_nedCtx); ned::Begin(id); }
+        ~ImScopeNed() { ned::End(); ned::SetCurrentEditor(nullptr); }
     };
 
     struct [[nodiscard]] ImScopeNedNode final : _Scope
     {
         ImScopeNedNode(ned::NodeId id) { ned::BeginNode(id); }
+        ImScopeNedNode(uint64_t a_id)  { ned::BeginNode(ned::NodeId(a_id)); }
         ~ImScopeNedNode() { ned::EndNode(); }
+    };
+
+    struct [[nodiscard]] ImScopeNedPin final : _Scope
+    {
+        ImScopeNedPin(ned::PinId a_id, ned::PinKind a_knd) { ned::BeginPin(a_id,a_knd); }
+        ImScopeNedPin(uint64_t   a_id, ned::PinKind a_knd) { ned::BeginPin(ned::PinId(a_id),a_knd); }
+        ~ImScopeNedPin() { ned::EndPin(); }
     };
 
     struct [[nodiscard]] ImScopeNedCreate final : _Scope
