@@ -35,7 +35,7 @@ namespace ImGui {
         IMGUI_API void StyleColorsSpectrum();
 
         namespace { // Unnamed namespace, since we only use this here. 
-            unsigned int Color(unsigned int c) {
+            constexpr unsigned int Color(unsigned int c) {
                 // add alpha.
                 // also swap red and blue channel for some reason.
                 // todo: figure out why, and fix it.
@@ -56,33 +56,33 @@ namespace ImGui {
         }
 
         namespace Static { // static colors
-            const unsigned int NONE = 0x00000000; // transparent
-            const unsigned int WHITE = Color(0xFFFFFF);
-            const unsigned int BLACK = Color(0x000000);
-            const unsigned int GRAY200 = Color(0xF4F4F4);
-            const unsigned int GRAY300 = Color(0xEAEAEA);
-            const unsigned int GRAY400 = Color(0xD3D3D3);
-            const unsigned int GRAY500 = Color(0xBCBCBC);
-            const unsigned int GRAY600 = Color(0x959595);
-            const unsigned int GRAY700 = Color(0x767676);
-            const unsigned int GRAY800 = Color(0x505050);
-            const unsigned int GRAY900 = Color(0x323232);
-            const unsigned int BLUE400 = Color(0x378EF0);
-            const unsigned int BLUE500 = Color(0x2680EB);
-            const unsigned int BLUE600 = Color(0x1473E6);
-            const unsigned int BLUE700 = Color(0x0D66D0);
-            const unsigned int RED400 = Color(0xEC5B62);
-            const unsigned int RED500 = Color(0xE34850);
-            const unsigned int RED600 = Color(0xD7373F);
-            const unsigned int RED700 = Color(0xC9252D);
-            const unsigned int ORANGE400 = Color(0xF29423);
-            const unsigned int ORANGE500 = Color(0xE68619);
-            const unsigned int ORANGE600 = Color(0xDA7B11);
-            const unsigned int ORANGE700 = Color(0xCB6F10);
-            const unsigned int GREEN400 = Color(0x33AB84);
-            const unsigned int GREEN500 = Color(0x2D9D78);
-            const unsigned int GREEN600 = Color(0x268E6C);
-            const unsigned int GREEN700 = Color(0x12805C);
+            constexpr unsigned int NONE = 0x00000000; // transparent
+            constexpr unsigned int WHITE = Color(0xFFFFFF);
+            constexpr unsigned int BLACK = Color(0x000000);
+            constexpr unsigned int GRAY200 = Color(0xF4F4F4);
+            constexpr unsigned int GRAY300 = Color(0xEAEAEA);
+            constexpr unsigned int GRAY400 = Color(0xD3D3D3);
+            constexpr unsigned int GRAY500 = Color(0xBCBCBC);
+            constexpr unsigned int GRAY600 = Color(0x959595);
+            constexpr unsigned int GRAY700 = Color(0x767676);
+            constexpr unsigned int GRAY800 = Color(0x505050);
+            constexpr unsigned int GRAY900 = Color(0x323232);
+            constexpr unsigned int BLUE400 = Color(0x378EF0);
+            constexpr unsigned int BLUE500 = Color(0x2680EB);
+            constexpr unsigned int BLUE600 = Color(0x1473E6);
+            constexpr unsigned int BLUE700 = Color(0x0D66D0);
+            constexpr unsigned int RED400 = Color(0xEC5B62);
+            constexpr unsigned int RED500 = Color(0xE34850);
+            constexpr unsigned int RED600 = Color(0xD7373F);
+            constexpr unsigned int RED700 = Color(0xC9252D);
+            constexpr unsigned int ORANGE400 = Color(0xF29423);
+            constexpr unsigned int ORANGE500 = Color(0xE68619);
+            constexpr unsigned int ORANGE600 = Color(0xDA7B11);
+            constexpr unsigned int ORANGE700 = Color(0xCB6F10);
+            constexpr unsigned int GREEN400 = Color(0x33AB84);
+            constexpr unsigned int GREEN500 = Color(0x2D9D78);
+            constexpr unsigned int GREEN600 = Color(0x268E6C);
+            constexpr unsigned int GREEN700 = Color(0x12805C);
         }
 
 #ifdef SPECTRUM_USE_LIGHT_THEME
