@@ -50,13 +50,13 @@ namespace ImGuiUX {
 
     struct [[nodiscard]] ImScopeWindow final : _Scope
     {
-        ImScopeWindow(
+        explicit ImScopeWindow(
             const char* name,
             bool* p_open = nullptr,
             ImGuiWindowFlags flags = 0,
             const char* dockSpaceName = nullptr)
         {
-            if (dockSpaceName)
+            if ((bool)dockSpaceName)
             {
                 const ImGuiID HostDockspaceId = ImGui::GetID(dockSpaceName);
                 ImGui::SetNextWindowDockID(HostDockspaceId, ImGuiCond_FirstUseEver);
@@ -79,28 +79,28 @@ namespace ImGuiUX {
 
     struct [[nodiscard]] ImScopeMenu final : _Scope
     {
-        ImScopeMenu(const char* name) { _bOpened = ImGui::BeginMenu(name); }
+        explicit ImScopeMenu(const char* name) { _bOpened = ImGui::BeginMenu(name); }
         ~ImScopeMenu() { if (_bOpened) { ImGui::EndMenu(); } }
     };
 
     struct [[nodiscard]] ImScopePopup final : _Scope
     {
-        ImScopePopup(const char* str_id, ImGuiWindowFlags flags = 0) { _bOpened = ImGui::BeginPopup(str_id,flags); }
+        explicit ImScopePopup(const char* str_id, ImGuiWindowFlags flags = 0) { _bOpened = ImGui::BeginPopup(str_id,flags); }
         ~ImScopePopup() { if (_bOpened) { ImGui::EndPopup(); } }
     };
 
     struct [[nodiscard]] ImScopeVertical final : _Scope
     {
 
-        ImScopeVertical(const char* str_id, const ImVec2& size = ImVec2(0, 0), float align = -1.0f) { ImGui::BeginVertical(str_id,size,align); }
-        ImScopeVertical(int   id, const ImVec2& size = ImVec2(0, 0), float align = -1) { ImGui::BeginVertical(id,size,align); }
+        explicit ImScopeVertical(const char* str_id, const ImVec2& size = ImVec2(0, 0), float align = -1.0f) { ImGui::BeginVertical(str_id,size,align); }
+        explicit ImScopeVertical(int   id, const ImVec2& size = ImVec2(0, 0), float align = -1) { ImGui::BeginVertical(id,size,align); }
         ~ImScopeVertical() { ImGui::EndVertical(); }
     };
 
     struct [[nodiscard]] ImScopeHorizontal final : _Scope
     {
 
-        ImScopeHorizontal(const char* str_id, const ImVec2& size = ImVec2(0, 0), float align = -1.0f) { ImGui::BeginHorizontal(str_id,size,align); }
+        explicit ImScopeHorizontal(const char* str_id, const ImVec2& size = ImVec2(0, 0), float align = -1.0f) { ImGui::BeginHorizontal(str_id,size,align); }
         ~ImScopeHorizontal() { ImGui::EndHorizontal(); }
     };
 #pragma endregion
@@ -120,8 +120,8 @@ namespace ImGuiUX {
 
     struct [[nodiscard]] ImScopeNedNode final : _Scope
     {
-        ImScopeNedNode(ned::NodeId id) { ned::BeginNode(id); }
-        ImScopeNedNode(uint64_t a_id)  { ned::BeginNode(ned::NodeId(a_id)); }
+        explicit ImScopeNedNode(ned::NodeId id) { ned::BeginNode(id); }
+        explicit ImScopeNedNode(uint64_t a_id)  { ned::BeginNode(ned::NodeId(a_id)); }
         ~ImScopeNedNode() { ned::EndNode(); }
     };
 
@@ -134,7 +134,7 @@ namespace ImGuiUX {
 
     struct [[nodiscard]] ImScopeNedCreate final : _Scope
     {
-        ImScopeNedCreate(const ImVec4 & color = ImVec4(1, 1, 1, 1), float thickness = 1.0f) { _bOpened = ned::BeginCreate(color,thickness); }
+        explicit ImScopeNedCreate(const ImVec4 & color = ImVec4(1, 1, 1, 1), float thickness = 1.0f) { _bOpened = ned::BeginCreate(color,thickness); }
         ~ImScopeNedCreate() { ned::EndCreate(); }
     };
 

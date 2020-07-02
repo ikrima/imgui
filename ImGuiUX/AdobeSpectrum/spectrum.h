@@ -40,9 +40,9 @@ namespace ImGui {
                 // also swap red and blue channel for some reason.
                 // todo: figure out why, and fix it.
                 const short a = 0xFF;
-                const short r = (c >> 16) & 0xFF;
-                const short g = (c >> 8) & 0xFF;
-                const short b = (c >> 0) & 0xFF;
+                const short r = (short)((c >> 16) & 0xFF);
+                const short g = (short)((c >> 8) & 0xFF );
+                const short b = (short)((c >> 0) & 0xFF );
                 return(a << 24)
                     | (r << 0)
                     | (g << 8)
