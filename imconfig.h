@@ -13,7 +13,7 @@
 
 #pragma once
 
-#include "ES2/Debug/ES2Asserts.h"
+#include "ES2Core/Debug/ES2Asserts.h"
 
 //========================================================================================================================
 #pragma region ImGuiUX Config
