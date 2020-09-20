@@ -7,6 +7,11 @@
 
 namespace ImGuiUX {
   IMGUI_API ImGuiViewport* FindViewportByPlatformHandleRaw(void* platform_handle_raw);     // this is a helper for back-ends. the type platform_handle is decided by the back-end (e.g. HWND, MyWindow*, GLFWwindow* etc.)
+
+  ES2FRCINL() int32_t DragInt(const char* label, int32_t v, float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* format = "%d") {
+    ImGui::DragInt(label,&v,v_speed,v_min,v_max,format);
+    return v;
+  }
 }
 
 #pragma endregion
