@@ -5,14 +5,28 @@
 //========================================================================================================================
 #pragma region ImGui Functionality Extensions
 
-namespace ImGuiUX {
-  IMGUI_API ImGuiViewport* FindViewportByPlatformHandleRaw(void* platform_handle_raw);     // this is a helper for back-ends. the type platform_handle is decided by the back-end (e.g. HWND, MyWindow*, GLFWwindow* etc.)
+namespace ImGuiUX
+{
+// back-ends helper. the type platform_handle is decided by the back-end (e.g. HWND, MyWindow*, GLFWwindow* etc.)
+IMGUI_API ImGuiViewport* FindViewportByPlatformHandleRaw(void* platform_handle_raw);
 
-  ES2FRCINL() int32_t DragInt(const char* label, int32_t v, float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* format = "%d") {
-    ImGui::DragInt(label,&v,v_speed,v_min,v_max,format);
-    return v;
-  }
+template <class _tVal>
+struct OptVal_t {
+  _tVal val;
+  bool  hasval;
+
+  constexpr explicit operator bool() const noexcept { return hasval; }
+};
+
+ES2FRCINL() OptVal_t<int32_t> DragInt(const char* label, int32_t v, float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* format = "%d")
+{
+  OptVal_t<int32_t> ret;
+  ret.hasval = ImGui::DragInt(label, &v, v_speed, v_min, v_max, format);
+  ret.val    = v;
+  return ret;
 }
+
+}    // namespace ImGuiUX
 
 #pragma endregion
 //========================================================================================================================
