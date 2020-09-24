@@ -26,6 +26,13 @@ ES2FRCINL() OptVal_t<int32_t> DragInt(const char* label, int32_t v, float v_spee
   return ret;
 }
 
+ES2FRCINL() OptVal_t<bool> Checkbox(const char* label, bool v) {
+  OptVal_t<bool> ret;
+  ret.hasval = ImGui::Checkbox(label, &v);
+  ret.val = v;
+  return ret;
+}
+
 }    // namespace ImGuiUX
 
 #pragma endregion
