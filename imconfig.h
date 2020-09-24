@@ -17,7 +17,7 @@
 #include "ES2/Core/ES2Asserts.h"
 
 //========================================================================================================================
-#pragma region ImGuiUX Config
+#pragma region ImGuiX Config
 
 #ifndef IMGUIUIX_FEATURE_ADOBESPECTRUM
   #define IMGUIUIX_FEATURE_ADOBESPECTRUM 1

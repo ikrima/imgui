@@ -7,14 +7,14 @@
 #pragma region Support for global across dll boundaries ImGui context
 #if IMGUIUX_SHAREDLIB
 namespace { ImGuiContext* globalImGuiCtx = nullptr; }
-ImGuiContext* ImGuiUX::GetGlobalImGuiCtx() { return globalImGuiCtx; }
-void ImGuiUX::SetGlobalImGuiCtx(ImGuiContext* InCtx) { globalImGuiCtx = InCtx; }
+ImGuiContext* ImGuiX::GetGlobalImGuiCtx() { return globalImGuiCtx; }
+void ImGuiX::SetGlobalImGuiCtx(ImGuiContext* InCtx) { globalImGuiCtx = InCtx; }
 #endif
 #pragma endregion
 //========================================================================================================================
 
 
-ImGuiViewport* ImGuiUX::FindViewportByPlatformHandleRaw(void* platform_handle_raw)
+ImGuiViewport* ImGuiX::FindViewportByPlatformHandleRaw(void* platform_handle_raw)
 {
     ImGuiContext& g = *GImGui;
     for (int i = 0; i != g.Viewports.Size; i++) {

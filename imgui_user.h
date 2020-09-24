@@ -8,10 +8,10 @@
 #pragma region Support for global across dll boundaries ImGui context
 #if IMGUIUX_SHAREDLIB
 // If compiling imgui as a shared dll, we need to wrap the global context with a function
-#define GImGui (ImGuiUX::GetGlobalImGuiCtx())
-#define IMGUI_SET_CURRENT_CONTEXT_FUNC(InCtx) ImGuiUX::SetGlobalImGuiCtx(InCtx)
+#define GImGui (ImGuiX::GetGlobalImGuiCtx())
+#define IMGUI_SET_CURRENT_CONTEXT_FUNC(InCtx) ImGuiX::SetGlobalImGuiCtx(InCtx)
 
-namespace ImGuiUX {
+namespace ImGuiX {
     IMGUI_API ImGuiContext* GetGlobalImGuiCtx();
     IMGUI_API void          SetGlobalImGuiCtx(ImGuiContext*);
 };

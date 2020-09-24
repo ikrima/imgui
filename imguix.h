@@ -5,7 +5,7 @@
 //========================================================================================================================
 #pragma region ImGui Functionality Extensions
 
-namespace ImGuiUX
+namespace ImGuiX
 {
 // back-ends helper. the type platform_handle is decided by the back-end (e.g. HWND, MyWindow*, GLFWwindow* etc.)
 IMGUI_API ImGuiViewport* FindViewportByPlatformHandleRaw(void* platform_handle_raw);
@@ -33,7 +33,7 @@ ES2FRCINL() OptVal_t<bool> Checkbox(const char* label, bool v) {
   return ret;
 }
 
-}    // namespace ImGuiUX
+}    // namespace ImGuiX
 
 #pragma endregion
 //========================================================================================================================
@@ -43,10 +43,10 @@ ES2FRCINL() OptVal_t<bool> Checkbox(const char* label, bool v) {
 
 #define IM_CONCAT(x, y) IM_CONCAT_IMPL(x, y)
 #define IM_CONCAT_IMPL(x, y) x##y
-#define IMWITH(x) if(auto IM_CONCAT(hold,__LINE__) = ImGuiUX::##x; IM_CONCAT(hold,__LINE__).IsOpen())
+#define IMWITH(x) if(auto IM_CONCAT(hold,__LINE__) = ImGuiX::##x; IM_CONCAT(hold,__LINE__).IsOpen())
 
 
-namespace ImGuiUX
+namespace ImGuiX
 {
 
 struct [[nodiscard]] _Scope
