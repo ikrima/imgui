@@ -29,7 +29,7 @@ namespace ImGuiUX {
 #endif
 
 #if IMGUIUIX_FEATURE_NODEDITOR
-#include "ImGuiUX/DmdNodeEditor/NodeEditor/include/imgui_node_editor.h"
+#include "ImGuiUX/DmdNodeEditor/imgui_node_editor.h"
 #endif
 
 #pragma endregion
