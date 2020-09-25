@@ -43,7 +43,7 @@ ES2FRCINL() OptVal_t<bool> Checkbox(const char* label, bool v) {
 
 #define IM_CONCAT(x, y) IM_CONCAT_IMPL(x, y)
 #define IM_CONCAT_IMPL(x, y) x##y
-#define IMWITH(x) if(auto IM_CONCAT(hold,__LINE__) = ImGuiX::##x; IM_CONCAT(hold,__LINE__).IsOpen())
+#define IMWITH(x) if(auto IM_CONCAT(hold,__LINE__) = ImGuiX::x; IM_CONCAT(hold,__LINE__).IsOpen())
 
 
 namespace ImGuiX
