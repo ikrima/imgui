@@ -133,7 +133,8 @@ struct [[nodiscard]] ImScopeVertical final : _Scope
 struct [[nodiscard]] ImScopeHorizontal final : _Scope
 {
   explicit ImScopeHorizontal(const char* str_id, const ImVec2& size = ImVec2(0, 0), float align = -1.0f) { ImGui::BeginHorizontal(str_id,size,align); }
-  ~ImScopeHorizontal() { ImGui::EndHorizontal(); }
+  explicit ImScopeHorizontal(int   id, const ImVec2& size = ImVec2(0, 0), float align = -1)              { ImGui::BeginHorizontal(id,size,align); }
+  ~ImScopeHorizontal()                                                                                   { ImGui::EndHorizontal(); }
 };
 
 #pragma endregion
@@ -147,8 +148,20 @@ struct [[nodiscard]] ImScopeHorizontal final : _Scope
 namespace ned = ax::NodeEditor;
 struct [[nodiscard]] ImScopeNed final : _Scope
 {
-  ImScopeNed(const char* id, ned::EditorContext* a_nedCtx) { ned::SetCurrentEditor(a_nedCtx); ned::Begin(id); }
-  ~ImScopeNed() { ned::End(); ned::SetCurrentEditor(nullptr); }
+  ImScopeNed(ned::EditorContext* _nedCtx) { ned::SetCurrentEditor(_nedCtx); }
+  ~ImScopeNed() { ned::SetCurrentEditor(nullptr); }
+};
+
+struct [[nodiscard]] ImScopeNedDraw final : _Scope
+{
+  ImScopeNedDraw(const char* _nedId) { ned::Begin(_nedId); }
+  ~ImScopeNedDraw() { ned::End(); }
+};
+
+struct [[nodiscard]] ImScopeNedSuspend final : _Scope
+{
+  ImScopeNedSuspend()  { ned::Suspend(); }
+  ~ImScopeNedSuspend() { ned::Resume(); }
 };
 
 struct [[nodiscard]] ImScopeNedNode final : _Scope
