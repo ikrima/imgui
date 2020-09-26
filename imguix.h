@@ -18,6 +18,32 @@ struct OptVal_t {
   constexpr explicit operator bool() const noexcept { return hasval; }
 };
 
+ES2FRCINL() OptVal_t<bool> Checkbox(const char* label, bool v)
+{
+  OptVal_t<bool> ret;
+  ret.hasval = ImGui::Checkbox(label, &v);
+  ret.val = v;
+  return ret;
+}
+
+ES2FRCINL() OptVal_t<int32_t> InputInt(const char* label, int32_t v, int step = 1, int step_fast = 100, ImGuiInputTextFlags flags = 0)
+{
+  OptVal_t<int32_t> ret;
+  ret.hasval = ImGui::InputInt(label, &v, step, step_fast, flags);
+  ret.val    = v;
+  return ret;
+}
+
+ES2FRCINL() OptVal_t<float[3]> InputFloat3(const char* label, const float v[3], const char* format = "%.3f", ImGuiInputTextFlags flags = 0)
+{
+  OptVal_t<float[3]> ret = {
+    .val = {v[0], v[1], v[2]},
+    .hasval = false,
+  };
+  ret.hasval = ImGui::InputFloat3(label, ret.val, format, flags);
+  return ret;
+}
+
 ES2FRCINL() OptVal_t<int32_t> DragInt(const char* label, int32_t v, float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* format = "%d")
 {
   OptVal_t<int32_t> ret;
@@ -26,9 +52,10 @@ ES2FRCINL() OptVal_t<int32_t> DragInt(const char* label, int32_t v, float v_spee
   return ret;
 }
 
-ES2FRCINL() OptVal_t<bool> Checkbox(const char* label, bool v) {
-  OptVal_t<bool> ret;
-  ret.hasval = ImGui::Checkbox(label, &v);
+ES2FRCINL() OptVal_t<float> DragFloat(const char* label, float v, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", float power = 1.0f)
+{
+  OptVal_t<float> ret;
+  ret.hasval = ImGui::DragFloat(label, &v, v_speed, v_min, v_max, format);
   ret.val = v;
   return ret;
 }
