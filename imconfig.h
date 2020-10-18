@@ -13,8 +13,8 @@
 
 #pragma once
 
-#include "ES2UI/ES2UI.h"
-#include "ES2/Core/ES2Asserts.h"
+#include "es2ui/es2ui.h"
+#include "es2/core/es2asserts.h"
 
 //========================================================================================================================
 #pragma region ImGuiX Config
