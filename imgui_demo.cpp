@@ -2869,7 +2869,7 @@ static void ShowDemoWindowLayout()
                 ImVec2 rect_min = ImGui::GetItemRectMin();
                 ImVec2 rect_max = ImGui::GetItemRectMax();
 
-                draw_list->PushClipRect(rect_min, rect_max);
+                draw_list->PushClipRect(rect_min, rect_max, true);
 
                 float width = 0.0f;
                 ImVec2 direction, origin;
@@ -2932,7 +2932,7 @@ static void ShowDemoWindowLayout()
         ImGui::Spacing();
 
         ImVec2 widget_size;
-        widget_size.x = ImGui::GetContentRegionAvailWidth() / 4;
+        widget_size.x = ImGui::GetContentRegionAvail().x / 4;
         widget_size.y = horizontal ? floorf(widget_size.x / 3) : widget_size.x;
 
         ImVec2 small_widget_size = widget_size;
