@@ -678,7 +678,7 @@ void ImDrawList::AddPolyline(const ImVec2* points, const int points_count, ImU32
 
     const ImVec2 opaque_uv = _Data->TexUvWhitePixel;
     const int count = closed ? points_count : points_count - 1; // The number of line segments we need to draw
-    const bool thick_line = (thickness > 1.0f);
+    const bool thick_line = (thickness > _FringeScale);
 
     if (Flags & ImDrawListFlags_AntiAliasedLines)
     {
