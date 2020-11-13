@@ -25,7 +25,7 @@ namespace ImGuiX {
 #pragma region Widget Extensions
 
 #if IMGUIUIX_FEATURE_ADOBESPECTRUM
-#include "ImGuiUX/AdobeSpectrum/spectrum.h"
+#include "ImGuiUX/AdobeSpectrum/imgui_spectrum.h"
 #endif
 
 #if IMGUIUIX_FEATURE_NODEDITOR

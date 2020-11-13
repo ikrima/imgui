@@ -1,4 +1,4 @@
-#include "spectrum.h"
+#include "imgui_spectrum.h"
 
 #include "imgui.h"
 

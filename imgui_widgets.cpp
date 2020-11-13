@@ -1072,8 +1072,6 @@ bool ImGui::Checkbox(const char* label, bool* v)
     const ImRect check2_bb(check_bb.Min + offset, check_bb.Max - offset);
     const float check_sz = ImMin(check2_bb.GetWidth(), check2_bb.GetHeight());
     const float pad = ImMax(1.0f, (float)(int)(check_sz / 3.0f));
-    ImU32 check_col = GetColorU32(ImGuiCol_CheckMark);
-    IM_UNUSED(check_col);
 
     if (window->DC.ItemFlags & ImGuiItemFlags_MixedValue) 
     {
@@ -1157,7 +1155,7 @@ bool ImGui::RadioButton(const char* label, bool active)
         window->DrawList->AddCircleFilled(center, radius * 0.8f, ((held && hovered) ? Spectrum::BLUE700 : hovered ? Spectrum::BLUE600 : Spectrum::BLUE500), 16);
         window->DrawList->AddCircleFilled(center, radius * 0.25f, Spectrum::GRAY75, 16);
     }
-    else 
+    else
     {
         window->DrawList->AddCircleFilled(center, radius * 0.8f, ((held && hovered) ? Spectrum::GRAY800 : hovered ? Spectrum::GRAY700: Spectrum::GRAY600), 16);
         window->DrawList->AddCircleFilled(center, radius * 0.6f, Spectrum::GRAY75, 16);
