@@ -15,7 +15,7 @@
 #pragma once
 
 #include "es2ui/es2ui.h"
-#include "es2/core/es2asserts.h"
+#include "es2core/debug/es2assertmacros.h"
 
 //========================================================================================================================
 #pragma region ImGuiX Config
