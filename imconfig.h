@@ -15,6 +15,7 @@
 #pragma once
 
 #include "es2ui/es2ui.h"
+#include "es2core/core/es2mathtypes.h"
 #include "es2core/debug/es2assertmacros.h"
 
 //========================================================================================================================
