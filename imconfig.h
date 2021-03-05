@@ -21,12 +21,6 @@
 //========================================================================================================================
 #pragma region ImGuiX Config
 
-#ifndef IMGUIUIX_FEATURE_ADOBESPECTRUM
-  #define IMGUIUIX_FEATURE_ADOBESPECTRUM 1
-#endif
-#ifndef IMGUIUIX_FEATURE_NODEDITOR
-  #define IMGUIUIX_FEATURE_NODEDITOR     1
-#endif
 #ifndef IMGUIUX_SHAREDLIB
   #define IMGUIUX_SHAREDLIB              0
 #endif
