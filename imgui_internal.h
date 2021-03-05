@@ -126,7 +126,9 @@ struct ImGuiWindowSettings;         // Storage for a window .ini settings (we ke
 // Use your programming IDE "Go to definition" facility on the names of the center columns to find the actual flags/enum lists.
 typedef int ImGuiDataAuthority;         // -> enum ImGuiDataAuthority_      // Enum: for storing the source authority (dock node vs window) of a field
 typedef int ImGuiLayoutType;            // -> enum ImGuiLayoutType_         // Enum: Horizontal or vertical
+// Beg #TPLibMod-imgui: Stack Layout extension from Dmd
 typedef int ImGuiLayoutItemType;        // -> enum ImGuiLayoutItemType_    // Enum: Item or Spring
+// End TPLibMod
 typedef int ImGuiItemFlags;             // -> enum ImGuiItemFlags_          // Flags: for PushItemFlag()
 typedef int ImGuiItemStatusFlags;       // -> enum ImGuiItemStatusFlags_    // Flags: for DC.LastItemStatusFlags
 typedef int ImGuiOldColumnFlags;        // -> enum ImGuiOldColumnFlags_     // Flags: for BeginColumns()
@@ -787,12 +789,13 @@ enum ImGuiLayoutType_
     ImGuiLayoutType_Horizontal = 0,
     ImGuiLayoutType_Vertical = 1
 };
-
+// Beg #TPLibMod-imgui: Stack Layout extension from Dmd
 enum ImGuiLayoutItemType_
 {
     ImGuiLayoutItemType_Item,
     ImGuiLayoutItemType_Spring
 };
+// End TPLibMod
 
 enum ImGuiLogType
 {
@@ -1082,6 +1085,7 @@ struct ImGuiNextItemData
     inline void ClearFlags()    { Flags = ImGuiNextItemDataFlags_None; } // Also cleared manually by ItemAdd()!
 };
 
+// Beg #TPLibMod-imgui: Stack Layout extension from Dmd
 // sizeof() == 48
 struct ImGuiLayoutItem
 {
@@ -1147,6 +1151,8 @@ struct ImGuiLayout
         StartCursorMaxPos = ImVec2(0, 0);
     }
 };
+
+// End TPLibMod
 
 struct ImGuiShrinkWidthItem
 {
@@ -1961,11 +1967,13 @@ struct IMGUI_API ImGuiWindowTempData
     int                     CurrentTableIdx;        // Current table index (into g.Tables)
     ImGuiLayoutType         LayoutType;
     ImGuiLayoutType         ParentLayoutType;       // Layout type of parent window at the time of Begin()
-    
+
+    // Beg #TPLibMod-imgui: Stack Layout extension from Dmd
     ImGuiLayout*            CurrentLayout;
     ImGuiLayoutItem*        CurrentLayoutItem;
     ImVector<ImGuiLayout*>  LayoutStack;
     ImGuiStorage            Layouts;
+    // End TPLibMod
 
     int                     FocusCounterRegular;    // (Legacy Focus/Tabbing system) Sequential counter, start at -1 and increase as assigned via FocusableItemRegister() (FIXME-NAV: Needs redesign)
     int                     FocusCounterTabStop;    // (Legacy Focus/Tabbing system) Same, but only count widgets which you can Tab through.

@@ -3088,6 +3088,7 @@ static void ShowDemoWindowLayout()
         ImGui::TreePop();
     }
 
+    // Beg #TPLibMod-imgui: Stack Layout extension from Dmd
     if (ImGui::TreeNode("Stack Layout"))
     {
         static bool widget_a = true, widget_b = true, widget_c = true;
@@ -3220,6 +3221,7 @@ static void ShowDemoWindowLayout()
 
         ImGui::TreePop();
     }
+    // End TPLibMod
 }
 
 static void ShowDemoWindowPopups()

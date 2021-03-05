@@ -68,11 +68,11 @@ CODE
 // [SECTION] MAIN CODE (most of the code! lots of stuff, needs tidying up!)
 // [SECTION] ERROR CHECKING
 // [SECTION] LAYOUT
+// [SECTION] STACK LAYOUT
 // [SECTION] SCROLLING
 // [SECTION] TOOLTIPS
 // [SECTION] POPUPS
 // [SECTION] KEYBOARD/GAMEPAD NAVIGATION
-// [SECTION] STACK LAYOUT
 // [SECTION] DRAG AND DROP
 // [SECTION] LOGGING/CAPTURING
 // [SECTION] SETTINGS
@@ -892,6 +892,7 @@ static void             NavSaveLastChildNavWindowIntoParent(ImGuiWindow* nav_win
 static ImGuiWindow*     NavRestoreLastChildNavWindow(ImGuiWindow* window);
 static int              FindWindowFocusIndex(ImGuiWindow* window);
 
+// Beg #TPLibMod-imgui: Stack Layout extension from Dmd
 // Stack Layout
 static ImGuiLayout*     FindLayout(ImGuiID id, ImGuiLayoutType type);
 static ImGuiLayout*     CreateNewLayout(ImGuiID id, ImGuiLayoutType type, ImVec2 size);
@@ -911,6 +912,7 @@ static void             BeginLayoutItem(ImGuiLayout& layout);
 static void             EndLayoutItem(ImGuiLayout& layout);
 static void             AddLayoutSpring(ImGuiLayout& layout, float weight, float spacing);
 static void             SignedIndent(float indent);
+// End TPLibMod
 
 // Error Checking
 static void             ErrorCheckNewFrameSanityChecks();
@@ -1013,7 +1015,9 @@ ImGuiStyle::ImGuiStyle()
     GrabRounding            = 0.0f;             // Radius of grabs corners rounding. Set to 0.0f to have rectangular slider grabs.
     LogSliderDeadzone       = 4.0f;             // The size in pixels of the dead-zone around zero on logarithmic sliders that cross zero.
     TabRounding             = 4.0f;             // Radius of upper corners of a tab. Set to 0.0f to have rectangular tabs.
+    // Beg #TPLibMod-imgui: Stack Layout extension from Dmd
     LayoutAlign             = 0.5f;             // Element alignment inside horizontal and vertical layouts (0.0f - left/top, 1.0f - right/bottom, 0.5f - center).
+    // End TPLibMod
     TabBorderSize           = 0.0f;             // Thickness of border around tabs.
     TabMinWidthForCloseButton = 0.0f;           // Minimum width for close button to appears on an unselected tab when hovered. Set to 0.0f to always show when hovering, set to FLT_MAX to never show close button unless selected.
     ColorButtonPosition     = ImGuiDir_Right;   // Side of the color button in the ColorEdit4 widget (left/right). Defaults to ImGuiDir_Right.
@@ -2541,7 +2545,9 @@ static const ImGuiStyleVarInfo GStyleVarInfo[] =
     { ImGuiDataType_Float, 1, (ImU32)IM_OFFSETOF(ImGuiStyle, TabRounding) },         // ImGuiStyleVar_TabRounding
     { ImGuiDataType_Float, 2, (ImU32)IM_OFFSETOF(ImGuiStyle, ButtonTextAlign) },     // ImGuiStyleVar_ButtonTextAlign
     { ImGuiDataType_Float, 2, (ImU32)IM_OFFSETOF(ImGuiStyle, SelectableTextAlign) }, // ImGuiStyleVar_SelectableTextAlign
+    // Beg #TPLibMod-imgui: Stack Layout extension from Dmd
     { ImGuiDataType_Float, 1, (ImU32)IM_OFFSETOF(ImGuiStyle, LayoutAlign) },         // ImGuiStyleVar_LayoutAlign
+    // End TPLibMod
 };
 
 static const ImGuiStyleVarInfo* GetStyleVarInfo(ImGuiStyleVar idx)
@@ -2945,11 +2951,14 @@ ImGuiWindow::~ImGuiWindow()
     IM_DELETE(Name);
     for (int i = 0; i != ColumnsStorage.Size; i++)
         ColumnsStorage[i].~ImGuiOldColumns();
+
+    // Beg #TPLibMod-imgui: Stack Layout extension from Dmd
     for (int i = 0; i < DC.Layouts.Data.Size; i++)
     {
         ImGuiLayout* layout = (ImGuiLayout*)DC.Layouts.Data[i].val_p;
         IM_DELETE(layout);
     }
+    // End TPLibMod
 }
 
 ImGuiID ImGuiWindow::GetID(const char* str, const char* str_end)
@@ -6747,14 +6756,14 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
         else
             SetLastItemData(window, window->MoveId, IsMouseHoveringRect(title_bar_rect.Min, title_bar_rect.Max, false) ? ImGuiItemStatusFlags_HoveredRect : 0, title_bar_rect);
 
-
+        // Beg #TPLibMod-imgui: Stack Layout extension from Dmd 
         // Mark all layouts as dead. They may be revived in this frame.
         for (int i = 0; i < window->DC.Layouts.Data.Size; i++)
         {
             ImGuiLayout* layout = (ImGuiLayout*)window->DC.Layouts.Data[i].val_p;
             layout->Live = false;
         }
-
+        // End TPLibMod
 
 #ifdef IMGUI_ENABLE_TEST_ENGINE
         if (!(window->Flags & ImGuiWindowFlags_NoTitleBar))
@@ -7875,22 +7884,10 @@ void ImGuiStackSizes::CompareWithCurrentState()
     // Window stacks
     // NOT checking: DC.ItemWidth, DC.TextWrapPos (per window) to allow user to conveniently push once and not pop (they are cleared on Begin)
     IM_ASSERT(SizeOfIDStack         == window->IDStack.Size     && "PushID/PopID or TreeNode/TreePop Mismatch!");
-    {
-        // User forgot EndVertical() or EndHorizontal()
-        int current = window->DC.LayoutStack.Size;
-        if (write)
-        {
-            *p = (short)current;
-        }
-        else if (!window->DC.LayoutStack.empty() && window->DC.LayoutStack.back())
-        {
-            if (current == 0 || window->DC.LayoutStack.back()->Type == ImGuiLayoutType_Horizontal)
-                IM_ASSERT(*p == current && "BeginHorizontal/EndHorizontal Mismatch!");
-            else
-                IM_ASSERT(*p == current && "BeginVertical/EndVertical Mismatch!");
-        }
-        p++;
-    }
+    // Beg #TPLibMod-imgui: Stack Layout extension from Dmd
+    IM_ASSERT(0                     == window->DC.LayoutStack.Size && (!window->DC.LayoutStack.Size || window->DC.LayoutStack.back()->Type == ImGuiLayoutType_Horizontal) && "BeginHorizontal/EndHorizontal Mismatch!");
+    IM_ASSERT(0                     == window->DC.LayoutStack.Size && (!window->DC.LayoutStack.Size || window->DC.LayoutStack.back()->Type == ImGuiLayoutType_Vertical)   && "BeginVertical/EndVertical Mismatch!");
+    // End TPLibMod
 
     // Global stacks
     // For color, style and font stacks there is an incentive to use Push/Begin/Pop/.../End patterns, so we relax our checks a little to allow them.
@@ -7946,12 +7943,14 @@ void ImGui::ItemSize(const ImVec2& size, float text_baseline_y)
     if (window->SkipItems)
         return;
 
+    // Beg #TPLibMod-imgui: Stack Layout extension from Dmd
     ImGuiLayoutType layout_type = window->DC.LayoutType;
     if (window->DC.CurrentLayout)
         layout_type = window->DC.CurrentLayout->Type;
 
     if (layout_type == ImGuiLayoutType_Vertical)
     {
+    // End TPLibMod
         // We increase the height in this function to accommodate for baseline offset.
         // In theory we should be offsetting the starting position (window->DC.CursorPos), that will be the topic of a larger refactor,
         // but since ItemSize() is not yet an API that moves the cursor (to handle e.g. wrapping) enlarging the height has the same effect.
@@ -7967,11 +7966,18 @@ void ImGui::ItemSize(const ImVec2& size, float text_baseline_y)
         window->DC.CursorMaxPos.x = ImMax(window->DC.CursorMaxPos.x, window->DC.CursorPosPrevLine.x);
         window->DC.CursorMaxPos.y = ImMax(window->DC.CursorMaxPos.y, window->DC.CursorPos.y - g.Style.ItemSpacing.y);
 
+        // Beg #TPLibMod-imgui: Stack Layout extension from Dmd
         window->DC.PrevLineSize.x = 0.0f;
+        // End TPLibMod
         window->DC.PrevLineSize.y = line_height;
         window->DC.CurrLineSize.y = 0.0f;
         window->DC.PrevLineTextBaseOffset = ImMax(window->DC.CurrLineTextBaseOffset, text_baseline_y);
         window->DC.CurrLineTextBaseOffset = 0.0f;
+
+    // Beg #TPLibMod-imgui: Stack Layout extension from Dmd
+        //// Horizontal layout mode
+        //if (window->DC.LayoutType == ImGuiLayoutType_Horizontal)
+        //    SameLine();
     }
     else
     {
@@ -7992,12 +7998,8 @@ void ImGui::ItemSize(const ImVec2& size, float text_baseline_y)
         window->DC.CurrLineSize.x = 0.0f;
         window->DC.PrevLineTextBaseOffset = ImMax(window->DC.CurrLineTextBaseOffset, text_baseline_y);
         window->DC.CurrLineTextBaseOffset = window->DC.PrevLineTextBaseOffset;
-    }
-
-    ////if (g.IO.KeyAlt) window->DrawList->AddCircle(window->DC.CursorMaxPos, 3.0f, IM_COL32(255,0,0,255), 4); // [DEBUG]
-    //// Horizontal layout mode
-    //if (window->DC.LayoutType == ImGuiLayoutType_Horizontal)
-    //    SameLine();
+    }    
+    // End TPLibMod
 }
 
 void ImGui::ItemSize(const ImRect& bb, float text_baseline_y)
@@ -8045,9 +8047,11 @@ bool ImGui::ItemAdd(const ImRect& bb, ImGuiID id, const ImRect* nav_bb_arg)
     window->DC.LastItemRect = bb;
     window->DC.LastItemStatusFlags = ImGuiItemStatusFlags_None;
     g.NextItemData.Flags = ImGuiNextItemDataFlags_None;
- 
+
+    // Beg #TPLibMod-imgui: Stack Layout extension from Dmd
     if (window->DC.CurrentLayoutItem)
         window->DC.CurrentLayoutItem->MeasuredBounds.Max = ImMax(window->DC.CurrentLayoutItem->MeasuredBounds.Max, bb.Max);
+    // End TPLibMod
 
 #ifdef IMGUI_ENABLE_TEST_ENGINE
     if (id != 0)
@@ -10338,7 +10342,7 @@ void ImGui::NavUpdateWindowingOverlay()
     PopStyleVar();
 }
 
-
+// Beg #TPLibMod-imgui: Stack Layout extension from Dmd
 //-----------------------------------------------------------------------------
 // [SECTION] STACK LAYOUT
 //-----------------------------------------------------------------------------
@@ -11026,11 +11030,10 @@ void ImGui::ResumeLayout()
     ImGuiWindow* window = GetCurrentWindow();
     IM_ASSERT(!window->DC.CurrentLayout);
     IM_ASSERT(!window->DC.LayoutStack.empty());
-    IM_UNUSED(window);
     PopLayout(NULL);
 }
 
-//-----------------------------------------------------------------------------
+// End TPLibMod
 
 //-----------------------------------------------------------------------------
 // [SECTION] DRAG AND DROP
