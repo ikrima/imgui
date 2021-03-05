@@ -24,18 +24,6 @@
 #ifndef IMGUIUX_SHAREDLIB
   #define IMGUIUX_SHAREDLIB              0
 #endif
-#ifndef IMGUIUX_FEATURE_UE4
-  #define IMGUIUX_FEATURE_UE4            0
-#endif
-
-//------------------------------------------------------------------------------------------------------------------------
-#pragma region UE4 Support
-#if IMGUIUX_FEATURE_UE4
-#define IMGUI_API UE4IMGUI_API
-#define IMGUI_DISABLE_WIN32_FUNCTIONS                     // [Win32] Won't use and link with any Win32 function (clipboard, ime).
-#endif
-#pragma endregion
-//------------------------------------------------------------------------------------------------------------------------
 
 //========================================================================================================================
 
