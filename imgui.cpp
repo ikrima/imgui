@@ -1008,8 +1008,10 @@ ImGuiStyle::ImGuiStyle()
     PopupRounding           = 0.0f;             // Radius of popup window corners rounding. Set to 0.0f to have rectangular child windows
     PopupBorderSize         = 1.0f;             // Thickness of border around popup or tooltip windows. Generally set to 0.0f or 1.0f. Other values not well tested.
     FramePadding            = ImVec2(4,3);      // Padding within a framed rectangle (used by most widgets)
+    // Beg #TPLibMod-imgui: Adobe Spectrum Style
     FrameRounding           = 4.0f;             // Radius of frame corners rounding. Set to 0.0f to have rectangular frames (used by most widgets).
     FrameBorderSize         = 1.0f;             // Thickness of border around frames. Generally set to 0.0f or 1.0f. Other values not well tested.
+    // End TPLibMod
     ItemSpacing             = ImVec2(8,4);      // Horizontal and vertical spacing between widgets/lines
     ItemInnerSpacing        = ImVec2(4,4);      // Horizontal and vertical spacing between within elements of a composed widget (e.g. a slider and its label)
     CellPadding             = ImVec2(4,2);      // Padding within a table cell
@@ -2694,7 +2696,9 @@ const char* ImGui::FindRenderedTextEnd(const char* text, const char* text_end)
 
 // Internal ImGui functions to render text
 // RenderText***() functions calls ImDrawList::AddText() calls ImBitmapFont::RenderText()
+// Beg #TPLibMod-imgui: Adobe Spectrum Style
 void ImGui::RenderText(ImVec2 pos, const char* text, const char* text_end, bool hide_text_after_hash, ImU32 color)
+// End TPLibMod
 {
     ImGuiContext& g = *GImGui;
     ImGuiWindow* window = g.CurrentWindow;
@@ -2714,13 +2718,16 @@ void ImGui::RenderText(ImVec2 pos, const char* text, const char* text_end, bool 
 
     if (text != text_display_end)
     {
+        // Beg #TPLibMod-imgui: Adobe Spectrum Style
         window->DrawList->AddText(g.Font, g.FontSize, pos, (color == 0 ? GetColorU32(ImGuiCol_Text) : color), text, text_display_end);
+        // End TPLibMod
         if (g.LogEnabled)
             LogRenderedText(&pos, text, text_display_end);
     }
 }
-
+// Beg #TPLibMod-imgui: Adobe Spectrum Style
 void ImGui::RenderTextWrapped(ImVec2 pos, const char* text, const char* text_end, float wrap_width, ImU32 color)
+// End TPLibMod
 {
     ImGuiContext& g = *GImGui;
     ImGuiWindow* window = g.CurrentWindow;
@@ -2730,7 +2737,9 @@ void ImGui::RenderTextWrapped(ImVec2 pos, const char* text, const char* text_end
 
     if (text != text_end)
     {
+        // Beg #TPLibMod-imgui: Adobe Spectrum Style
         window->DrawList->AddText(g.Font, g.FontSize, pos, (color == 0 ? GetColorU32(ImGuiCol_Text) : color), text, text_end, wrap_width);
+        // End TPLibMod
         if (g.LogEnabled)
             LogRenderedText(&pos, text, text_end);
     }
@@ -2738,7 +2747,9 @@ void ImGui::RenderTextWrapped(ImVec2 pos, const char* text, const char* text_end
 
 // Default clip_rect uses (pos_min,pos_max)
 // Handle clipping on CPU immediately (vs typically let the GPU clip the triangles that are overlapping the clipping rectangle edges)
+// Beg #TPLibMod-imgui: Adobe Spectrum Style
 void ImGui::RenderTextClippedEx(ImDrawList* draw_list, const ImVec2& pos_min, const ImVec2& pos_max, const char* text, const char* text_display_end, const ImVec2* text_size_if_known, const ImVec2& align, const ImRect* clip_rect, ImU32 color)
+// End TPLibMod
 {
     // Perform CPU side clipping for single clipped element to avoid using scissor state
     ImVec2 pos = pos_min;
@@ -2758,15 +2769,21 @@ void ImGui::RenderTextClippedEx(ImDrawList* draw_list, const ImVec2& pos_min, co
     if (need_clipping)
     {
         ImVec4 fine_clip_rect(clip_min->x, clip_min->y, clip_max->x, clip_max->y);
+        // Beg #TPLibMod-imgui: Adobe Spectrum Style
         draw_list->AddText(NULL, 0.0f, pos, (color != 0 ? color : GetColorU32(ImGuiCol_Text)), text, text_display_end, 0.0f, &fine_clip_rect);
+        // End TPLibMod
     }
     else
     {
+        // Beg #TPLibMod-imgui: Adobe Spectrum Style
         draw_list->AddText(NULL, 0.0f, pos, (color != 0 ? color : GetColorU32(ImGuiCol_Text)), text, text_display_end, 0.0f, NULL);
+        // End TPLibMod
     }
 }
 
+// Beg #TPLibMod-imgui: Adobe Spectrum Style
 void ImGui::RenderTextClipped(const ImVec2& pos_min, const ImVec2& pos_max, const char* text, const char* text_end, const ImVec2* text_size_if_known, const ImVec2& align, const ImRect* clip_rect, ImU32 color)
+// End TPLibMod
 {
     // Hide anything after a '##' string
     const char* text_display_end = FindRenderedTextEnd(text, text_end);
@@ -2776,7 +2793,9 @@ void ImGui::RenderTextClipped(const ImVec2& pos_min, const ImVec2& pos_max, cons
 
     ImGuiContext& g = *GImGui;
     ImGuiWindow* window = g.CurrentWindow;
+    // Beg #TPLibMod-imgui: Adobe Spectrum Style
     RenderTextClippedEx(window->DrawList, pos_min, pos_max, text, text_display_end, text_size_if_known, align, clip_rect, color);
+    // End TPLibMod
     if (g.LogEnabled)
         LogRenderedText(&pos_min, text, text_display_end);
 }
@@ -4004,7 +4023,7 @@ void ImGui::NewFrame()
 {
     IM_ASSERT(GImGui != NULL && "No current context. Did you call ImGui::CreateContext() and ImGui::SetCurrentContext() ?");
     ImGuiContext& g = *GImGui;
-    
+
     // Remove pending delete hooks before frame start.
     // This deferred removal avoid issues of removal while iterating the hook vector
     for (int n = g.Hooks.Size - 1; n >= 0; n--)
@@ -6797,7 +6816,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
         else
             SetLastItemData(window, window->MoveId, IsMouseHoveringRect(title_bar_rect.Min, title_bar_rect.Max, false) ? ImGuiItemStatusFlags_HoveredRect : 0, title_bar_rect);
 
-        // Beg #TPLibMod-imgui: Stack Layout extension from Dmd 
+        // Beg #TPLibMod-imgui: Stack Layout extension from Dmd
         // Mark all layouts as dead. They may be revived in this frame.
         for (int i = 0; i < window->DC.Layouts.Data.Size; i++)
         {
@@ -8041,7 +8060,7 @@ void ImGui::ItemSize(const ImVec2& size, float text_baseline_y)
         window->DC.CurrLineSize.x = 0.0f;
         window->DC.PrevLineTextBaseOffset = ImMax(window->DC.CurrLineTextBaseOffset, text_baseline_y);
         window->DC.CurrLineTextBaseOffset = window->DC.PrevLineTextBaseOffset;
-    }    
+    }
     // End TPLibMod
 }
 
@@ -12479,7 +12498,7 @@ static void ImGui::UpdateSelectWindowViewport(ImGuiWindow* window)
     if (window->Viewport == NULL)
         if (!UpdateTryMergeWindowIntoHostViewport(window, main_viewport))
             window->Viewport = AddUpdateViewport(window, window->ID, window->Pos, window->Size, ImGuiViewportFlags_None);
-    
+
     // Mark window as allowed to protrude outside of its viewport and into the current monitor
     if (!lock_viewport)
     {
@@ -14345,7 +14364,7 @@ bool ImGui::DockNodeBeginAmendTabBar(ImGuiDockNode* node)
     PushOverrideID(node->ID);
     bool ret = BeginTabBarEx(node->TabBar, node->TabBar->BarRect, node->TabBar->Flags, node);
     IM_UNUSED(ret);
-    IM_ASSERT(ret);    
+    IM_ASSERT(ret);
     return true;
 }
 

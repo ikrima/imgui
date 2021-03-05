@@ -695,7 +695,10 @@ bool ImGui::ButtonEx(const char* label, const ImVec2& size_arg, ImGuiButtonFlags
 
     if (g.LogEnabled)
         LogSetNextTextDecoration("[", "]");
+
+    // Beg #TPLibMod-imgui: Adobe Spectrum Style
     RenderTextClipped(bb.Min + style.FramePadding, bb.Max - style.FramePadding, label, NULL, &label_size, style.ButtonTextAlign, &bb, GetColorU32(ImGuiCol_Text));
+    // End TPLibMod
 
     // Automatically close popups
     //if (pressed && !(flags & ImGuiButtonFlags_DontClosePopups) && (window->Flags & ImGuiWindowFlags_Popup))
@@ -1092,6 +1095,7 @@ bool ImGui::Checkbox(const char* label, bool* v)
     const ImRect check_bb(pos, pos + ImVec2(square_sz, square_sz));
     RenderNavHighlight(total_bb, id);
 
+    // Beg #TPLibMod-imgui: Adobe Spectrum Style
     // ImGui-Spectrum changes start here
     const ImVec2 offset(style.FramePadding.y, style.FramePadding.y);
     const ImRect check2_bb(check_bb.Min + offset, check_bb.Max - offset);
@@ -1121,12 +1125,16 @@ bool ImGui::Checkbox(const char* label, bool* v)
         PopStyleVar();
         PopStyleColor();
     }
+    // End TPLibMod
 
     ImVec2 label_pos = ImVec2(check_bb.Max.x + style.ItemInnerSpacing.x, check_bb.Min.y + style.FramePadding.y);
     if (g.LogEnabled)
         LogRenderedText(&label_pos, mixed_value ? "[~]" : *v ? "[x]" : "[ ]");
+
+    // Beg #TPLibMod-imgui: Adobe Spectrum Style
     if (label_size.x > 0.0f)
         RenderText(label_pos, label, nullptr, true, hovered ? Spectrum::GRAY900 : Spectrum::GRAY800);
+    // End TPLibMod
 
     IMGUI_TEST_ENGINE_ITEM_INFO(id, label, window->DC.ItemFlags | ImGuiItemStatusFlags_Checkable | (*v ? ImGuiItemStatusFlags_Checked : 0));
     return pressed;
@@ -1211,6 +1219,7 @@ bool ImGui::RadioButton(const char* label, bool active)
         MarkItemEdited(id);
 
     RenderNavHighlight(total_bb, id);
+    // Beg #TPLibMod-imgui: Adobe Spectrum Style
     if (active)
     {
         window->DrawList->AddCircleFilled(center, radius * 0.8f, ((held && hovered) ? Spectrum::BLUE700 : hovered ? Spectrum::BLUE600 : Spectrum::BLUE500), 16);
@@ -1221,12 +1230,15 @@ bool ImGui::RadioButton(const char* label, bool active)
         window->DrawList->AddCircleFilled(center, radius * 0.8f, ((held && hovered) ? Spectrum::GRAY800 : hovered ? Spectrum::GRAY700: Spectrum::GRAY600), 16);
         window->DrawList->AddCircleFilled(center, radius * 0.6f, Spectrum::GRAY75, 16);
     }
+    // End TPLibMod
 
     ImVec2 label_pos = ImVec2(check_bb.Max.x + style.ItemInnerSpacing.x, check_bb.Min.y + style.FramePadding.y);
     if (g.LogEnabled)
         LogRenderedText(&label_pos, active ? "(x)" : "( )");
+    // Beg #TPLibMod-imgui: Adobe Spectrum Style
     if (label_size.x > 0.0f)
         RenderText(label_pos, label, nullptr, true, hovered ? Spectrum::GRAY900 : Spectrum::GRAY800);
+    // End TPLibMod
 
     IMGUI_TEST_ENGINE_ITEM_INFO(id, label, window->DC.ItemFlags);
     return pressed;
@@ -1663,9 +1675,9 @@ bool ImGui::BeginCombo(const char* label, const char* preview_value, ImGuiComboF
 
     // Horizontally align ourselves with the framed text
     PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(style.FramePadding.x, style.WindowPadding.y));
-    PushStyleVar(ImGuiStyleVar_PopupRounding, 4.0f);
+    PushStyleVar(ImGuiStyleVar_PopupRounding, 4.0f); // Beg #TPLibMod-imgui: Adobe Spectrum Style End
     bool ret = Begin(name, NULL, window_flags);
-    PopStyleVar();
+    PopStyleVar(); // Beg #TPLibMod-imgui: Adobe Spectrum Style End
     PopStyleVar();
     if (!ret)
     {
@@ -1673,7 +1685,7 @@ bool ImGui::BeginCombo(const char* label, const char* preview_value, ImGuiComboF
         IM_ASSERT(0);   // This should never happen as we tested for IsPopupOpen() above
         return false;
     }
-    GetCurrentWindow()->DC.IsComboPopup = true;
+    GetCurrentWindow()->DC.IsComboPopup = true; // Beg #TPLibMod-imgui: Adobe Spectrum Style End
     return true;
 }
 
@@ -5844,7 +5856,10 @@ bool ImGui::TreeNodeBehavior(ImGuiID id, ImGuiTreeNodeFlags flags, const char* l
 
         if (g.LogEnabled)
             LogSetNextTextDecoration("###", "###");
+
+        // Beg #TPLibMod-imgui: Adobe Spectrum Style 
         RenderTextClipped(text_pos, frame_bb.Max, label, label_end, &label_size, ImVec2(0, 0), nullptr, Spectrum::GRAY50);
+        // End TPLibMod
     }
     else
     {
@@ -6114,6 +6129,7 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
     if (held && (flags & ImGuiSelectableFlags_DrawHoveredWhenHeld))
         hovered = true;
 
+    // Beg #TPLibMod-imgui: Adobe Spectrum Style
     if (window->DC.IsComboPopup) { // ImGui-Spectrum: change Selectable rendering for ComboBox and ListBox
 
         if (hovered) {
@@ -6129,6 +6145,7 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
         }
 
     } else if (hovered || selected)
+    // End TPLibMod
     {
         const ImU32 col = GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
         RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
@@ -6145,7 +6162,9 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
     if (flags & ImGuiSelectableFlags_Disabled) PushStyleColor(ImGuiCol_Text, style.Colors[ImGuiCol_TextDisabled]);
     RenderTextClipped(text_min, text_max, label, NULL, &label_size, style.SelectableTextAlign, &bb);
     if (flags & ImGuiSelectableFlags_Disabled) PopStyleColor();
+    // Beg #TPLibMod-imgui: Adobe Spectrum Style
     if (window->DC.IsComboPopup && selected) PopStyleColor(); // ImGui-Spectrum: undo blue color from above
+    // End TPLibMod
 
     // Automatically close popups
     if (pressed && (window->Flags & ImGuiWindowFlags_Popup) && !(flags & ImGuiSelectableFlags_DontClosePopups) && !(window->DC.ItemFlags & ImGuiItemFlags_SelectableDontClosePopup))
@@ -6211,7 +6230,9 @@ bool ImGui::BeginListBox(const char* label, const ImVec2& size_arg)
     }
 
     BeginChildFrame(id, frame_bb.GetSize());
+    // Beg #TPLibMod-imgui: Adobe Spectrum Style
     GetCurrentWindow()->DC.IsComboPopup = true;
+    // End TPLibMod
     return true;
 }
 
