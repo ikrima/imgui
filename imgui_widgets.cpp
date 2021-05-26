@@ -5897,8 +5897,10 @@ bool ImGui::TreeNodeBehavior(ImGuiID id, ImGuiTreeNodeFlags flags, const char* l
         // Unframed typed for tree nodes
         if (hovered || selected)
         {
-            const ImU32 bg_col = GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
+            const ImU32 bg_col = GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header, 0.15f);
             RenderFrame(frame_bb.Min, frame_bb.Max, bg_col, false);
+            window->DrawList->AddRect(frame_bb.Min, frame_bb.Max, bg_col);
+            
             RenderNavHighlight(frame_bb, id, nav_highlight_flags);
         }
         if (flags & ImGuiTreeNodeFlags_Bullet)
@@ -6178,7 +6180,7 @@ bool ImGui::Selectable(const char* label, bool selected, ImGuiSelectableFlags fl
     } else if (hovered || selected)
     // End TPLibMod
     {
-        const ImU32 col = GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header);
+        const ImU32 col = GetColorU32((held && hovered) ? ImGuiCol_HeaderActive : hovered ? ImGuiCol_HeaderHovered : ImGuiCol_Header, 0.25f);
         RenderFrame(bb.Min, bb.Max, col, false, 0.0f);
         RenderNavHighlight(bb, id, ImGuiNavHighlightFlags_TypeThin | ImGuiNavHighlightFlags_NoRounding);
     }
